@@ -35,7 +35,22 @@ export async function GET(req, { params }) {
           : 'tour-goa-signature';
       const refItinerary = db.getItinerary(refPlanId);
       days = (refItinerary?.days || []).map((d, idx) => ({ ...d, id: `day-${id}-${idx+1}`, tour_plan_id: id }));
-      items = (refItinerary?.items || []).map((i, idx) => ({ ...i, id: `item-${id}-${idx+1}`, tour_plan_id: id }));
+      items = (refItinerary?.items || []).map((i, idx) => ({
+        ...i,
+        id: `item-${id}-${idx+1}`,
+        tour_plan_id: id,
+        type: i.type || i.item_type || 'activity',
+        item_type: i.item_type || i.type || 'activity',
+        cost: Number(i.cost || i.price || i.price_per_night || 0)
+      }));
+    } else {
+      // Normalize any existing items so item_type and type are both present
+      items = items.map(i => ({
+        ...i,
+        type: i.type || i.item_type || 'activity',
+        item_type: i.item_type || i.type || 'activity',
+        cost: Number(i.cost || i.price || i.price_per_night || 0)
+      }));
     }
 
     const bookings = db.getBookingsByTourPlan(id) || [];
