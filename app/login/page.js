@@ -4,25 +4,31 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/lib/context/AuthContext';
-import { BuildingIcon, SuitcaseIcon, CompassIcon, HouseDoorIcon, PlaneIcon } from '@/components/ui/Icons';
-
+import { BuildingIcon, SuitcaseIcon, PlaneIcon } from '@/components/ui/Icons';
 
 export default function LoginPage() {
-  const { user, loginWithGoogle, loginAsDemo, signUpWithRole, loading } = useAuth();
+  const { user, loginWithEmail, signUpWithEmail, loginWithGoogle, loginAsDemo, loading } = useAuth();
   const [authMode, setAuthMode] = useState('login'); // 'login' | 'signup'
-  const [selectedRole, setSelectedRole] = useState('operator');
+  const [selectedRole, setSelectedRole] = useState('traveler');
   const [authError, setAuthError] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
 
-  // Form State for role signup
+  // Login form fields
+  const [loginEmail, setLoginEmail] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
+
+  // Signup form fields
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    password: '',
     phone: '',
-    organization: '',
-    region: 'Goa & Western Coast'
+    organization: ''
   });
+
+  // Demo accordion toggle
+  const [showDemoOptions, setShowDemoOptions] = useState(false);
 
   useEffect(() => {
     if (!loading && user) {
@@ -30,12 +36,70 @@ export default function LoginPage() {
         if (user.role === 'operator') {
           router.push('/operator/dashboard');
         } else {
-          router.push('/');
+          router.push('/account');
         }
       }, 50);
       return () => clearTimeout(timer);
     }
   }, [user, loading, router]);
+
+  const handleEmailLogin = async (e) => {
+    e.preventDefault();
+    setAuthError(null);
+    setIsSubmitting(true);
+
+    try {
+      const res = await loginWithEmail(loginEmail, loginPassword);
+      if (!res.success) {
+        setAuthError(res.error || 'Invalid email or password.');
+      } else {
+        if (res.user?.role === 'operator') router.push('/operator/dashboard');
+        else router.push('/account');
+      }
+    } catch (err) {
+      setAuthError(err.message || 'Error logging in.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleRoleSignup = async (e) => {
+    e.preventDefault();
+    setAuthError(null);
+    setIsSubmitting(true);
+
+    if (!formData.name.trim()) {
+      setAuthError('Please enter your full name.');
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (!formData.password || formData.password.length < 6) {
+      setAuthError('Password must be at least 6 characters.');
+      setIsSubmitting(false);
+      return;
+    }
+
+    try {
+      const res = await signUpWithEmail(
+        formData.email,
+        formData.password,
+        formData.name,
+        selectedRole
+      );
+
+      if (!res.success) {
+        setAuthError(res.error || 'Failed to create account.');
+      } else {
+        if (selectedRole === 'operator') router.push('/operator/dashboard');
+        else router.push('/account');
+      }
+    } catch (err) {
+      setAuthError(err.message || 'Error signing up.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const handleGoogleLogin = async () => {
     setAuthError(null);
@@ -43,7 +107,7 @@ export default function LoginPage() {
     try {
       const res = await loginWithGoogle();
       if (!res.success) {
-        setAuthError(res.error || "Authentication failed. Please verify Firebase settings.");
+        setAuthError(res.error || "Authentication failed. Please check Firebase settings.");
       }
     } catch (err) {
       setAuthError(err.message || "An unexpected error occurred during Google sign in.");
@@ -55,48 +119,21 @@ export default function LoginPage() {
   const handleDemoLogin = (role) => {
     loginAsDemo(role);
     if (role === 'operator') router.push('/operator/dashboard');
-    else router.push('/');
-  };
-
-  const handleRoleSignup = (e) => {
-    e.preventDefault();
-    setAuthError(null);
-    setIsSubmitting(true);
-
-    try {
-      const roleTitles = {
-        traveler: 'Explorer & Traveler',
-        operator: `${formData.organization || 'Celestial Tours'} Tour Operator`
-      };
-
-      signUpWithRole(
-        formData.name || (selectedRole === 'traveler' ? 'Aditi Sharma' : 'Team Lead'),
-        formData.email,
-        selectedRole,
-        roleTitles[selectedRole]
-      );
-
-      if (selectedRole === 'operator') router.push('/operator/dashboard');
-      else router.push('/');
-    } catch (err) {
-      setAuthError(err.message || 'Error signing up');
-    } finally {
-      setIsSubmitting(false);
-    }
+    else router.push('/account');
   };
 
   const roleCards = [
     {
-      id: 'operator',
-      title: 'Tour Operator',
-      icon: <BuildingIcon size={20} />,
-      desc: 'Manage packages, add vendor options, DAG replanning & live rosters'
-    },
-    {
       id: 'traveler',
       title: 'Traveler',
       icon: <SuitcaseIcon size={20} />,
-      desc: 'Explore, plan AI itineraries, customize payments & trip companion'
+      desc: 'Personalized AI itineraries, flexible checkout, vouchers & trip companion'
+    },
+    {
+      id: 'operator',
+      title: 'Tour Operator',
+      icon: <BuildingIcon size={20} />,
+      desc: 'Manage packages, add vendor contracts, DAG replanning & live rosters'
     }
   ];
 
@@ -115,8 +152,8 @@ export default function LoginPage() {
         background: '#ffffff',
         border: '1px solid #e2e8f0',
         borderRadius: '24px',
-        padding: '38px 36px',
-        maxWidth: authMode === 'signup' ? '560px' : '480px',
+        padding: '36px 32px',
+        maxWidth: authMode === 'signup' ? '540px' : '440px',
         width: '100%',
         boxShadow: '0 20px 45px -10px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.04)',
         position: 'relative',
@@ -124,7 +161,7 @@ export default function LoginPage() {
         transition: 'all 0.3s'
       }}>
         {/* Brand Header */}
-        <div style={{ textAlign: 'center', marginBottom: '24px' }}>
+        <div style={{ textAlign: 'center', marginBottom: '22px' }}>
           <Link href="/" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '10px' }}>
             <div style={{
               width: 44, height: 44,
@@ -151,12 +188,12 @@ export default function LoginPage() {
           background: '#f1f5f9',
           borderRadius: '12px',
           padding: '4px',
-          marginBottom: '24px',
+          marginBottom: '22px',
           border: '1px solid #e2e8f0'
         }}>
           <button
             type="button"
-            onClick={() => setAuthMode('login')}
+            onClick={() => { setAuthMode('login'); setAuthError(null); }}
             style={{
               flex: 1,
               padding: '10px 14px',
@@ -175,7 +212,7 @@ export default function LoginPage() {
           </button>
           <button
             type="button"
-            onClick={() => setAuthMode('signup')}
+            onClick={() => { setAuthMode('signup'); setAuthError(null); }}
             style={{
               flex: 1,
               padding: '10px 14px',
@@ -194,77 +231,113 @@ export default function LoginPage() {
           </button>
         </div>
 
+        {authError && (
+          <div style={{
+            background: '#fef2f2',
+            border: '1px solid #fecaca',
+            color: '#dc2626',
+            padding: '11px 14px',
+            borderRadius: '10px',
+            fontSize: '0.82rem',
+            marginBottom: '16px'
+          }}>
+            {authError}
+          </div>
+        )}
+
         {/* ================= MODE: LOGIN ================= */}
         {authMode === 'login' && (
           <div>
-            <div style={{ textAlign: 'center', marginBottom: '22px' }}>
-              <h2 style={{ fontSize: '1.35rem', fontWeight: 800, color: '#0f172a', marginBottom: '6px' }}>
-                Welcome Back
+            <div style={{ textAlign: 'center', marginBottom: '18px' }}>
+              <h2 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0f172a', marginBottom: '4px' }}>
+                Welcome to Celestial
               </h2>
-              <p style={{ color: '#64748b', fontSize: '0.84rem', margin: 0 }}>
-                Log in to access your itinerary, operator console, or supplier portal.
+              <p style={{ color: '#64748b', fontSize: '0.82rem', margin: 0 }}>
+                Sign in with your email and password.
               </p>
             </div>
 
-            {authError && (
-              <div style={{
-                background: '#fef2f2',
-                border: '1px solid #fecaca',
-                color: '#dc2626',
-                padding: '12px 16px',
-                borderRadius: '10px',
-                fontSize: '0.84rem',
-                marginBottom: '18px'
-              }}>
-                {authError}
+            {/* Email & Password Form */}
+            <form onSubmit={handleEmailLogin} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+              <div>
+                <label style={{ fontSize: '0.74rem', fontWeight: 700, color: '#475569', display: 'block', marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                  Email Address *
+                </label>
+                <input
+                  type="email"
+                  required
+                  placeholder="you@example.com"
+                  value={loginEmail}
+                  onChange={(e) => setLoginEmail(e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '11px 14px',
+                    borderRadius: '9px',
+                    background: '#f8fafc',
+                    border: '1px solid #cbd5e1',
+                    color: '#0f172a',
+                    fontSize: '0.88rem',
+                    outline: 'none',
+                    boxSizing: 'border-box'
+                  }}
+                />
               </div>
-            )}
 
-            {/* Quick Demo Role Logins */}
-            <div style={{ marginBottom: '24px' }}>
-              <div style={{ fontSize: '0.74rem', fontWeight: 800, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '10px' }}>
-                Instant Access by Role (One-Click)
+              <div>
+                <label style={{ fontSize: '0.74rem', fontWeight: 700, color: '#475569', display: 'block', marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                  Password *
+                </label>
+                <input
+                  type="password"
+                  required
+                  placeholder="••••••••"
+                  value={loginPassword}
+                  onChange={(e) => setLoginPassword(e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '11px 14px',
+                    borderRadius: '9px',
+                    background: '#f8fafc',
+                    border: '1px solid #cbd5e1',
+                    color: '#0f172a',
+                    fontSize: '0.88rem',
+                    outline: 'none',
+                    boxSizing: 'border-box'
+                  }}
+                />
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
-                {roleCards.map(rc => (
-                  <button
-                    key={rc.id}
-                    type="button"
-                    onClick={() => handleDemoLogin(rc.id)}
-                    style={{
-                      background: '#ffffff',
-                      border: '1px solid #e2e8f0',
-                      borderRadius: '10px',
-                      padding: '12px',
-                      textAlign: 'left',
-                      cursor: 'pointer',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '10px',
-                      transition: 'all 0.15s ease',
-                      boxShadow: '0 1px 2px rgba(0,0,0,0.02)'
-                    }}
-                  >
-                    <span style={{ fontSize: '1.3rem' }}>{rc.icon}</span>
-                    <div>
-                      <div style={{ fontWeight: 800, fontSize: '0.84rem', color: '#0f172a' }}>{rc.title}</div>
-                      <div style={{ fontSize: '0.68rem', color: '#2563eb', fontWeight: 700 }}>Log In →</div>
-                    </div>
-                  </button>
-                ))}
-              </div>
-            </div>
+
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                style={{
+                  width: '100%',
+                  padding: '12px',
+                  borderRadius: '999px',
+                  background: 'linear-gradient(135deg, #2563eb, #1d4ed8)',
+                  color: '#ffffff',
+                  fontWeight: 800,
+                  fontSize: '0.92rem',
+                  border: 'none',
+                  cursor: 'pointer',
+                  boxShadow: '0 4px 14px rgba(37, 99, 235, 0.3)',
+                  marginTop: '4px'
+                }}
+              >
+                {isSubmitting ? 'Signing in...' : 'Sign In to Account'}
+              </button>
+            </form>
 
             <div style={{
               display: 'flex',
               alignItems: 'center',
               gap: '12px',
-              margin: '20px 0',
+              margin: '18px 0',
               color: '#94a3b8',
-              fontSize: '0.78rem'
+              fontSize: '0.76rem'
             }}>
               <div style={{ flex: 1, height: '1px', background: '#e2e8f0' }} />
-              <span>Or sign in with Google</span>
+              <span>Or continue with Google</span>
               <div style={{ flex: 1, height: '1px', background: '#e2e8f0' }} />
             </div>
 
@@ -273,17 +346,17 @@ export default function LoginPage() {
               disabled={isSubmitting}
               style={{
                 width: '100%',
-                padding: '12px 18px',
-                borderRadius: '10px',
+                padding: '11px 16px',
+                borderRadius: '999px',
                 background: '#ffffff',
                 border: '1px solid #cbd5e1',
                 color: '#334155',
-                fontSize: '0.9rem',
+                fontSize: '0.86rem',
                 fontWeight: 700,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                gap: '12px',
+                gap: '10px',
                 cursor: 'pointer',
                 boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)',
                 transition: 'all 0.2s'
@@ -295,39 +368,81 @@ export default function LoginPage() {
                 <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
                 <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
               </svg>
-              <span>{isSubmitting ? 'Authenticating...' : 'Sign in with Google Account'}</span>
+              <span>{isSubmitting ? 'Connecting...' : 'Sign in with Google'}</span>
             </button>
+
+            {/* Quick Demo Access (Accordion) */}
+            <div style={{ marginTop: '20px', borderTop: '1px solid #f1f5f9', paddingTop: '14px', textAlign: 'center' }}>
+              <button
+                type="button"
+                onClick={() => setShowDemoOptions(!showDemoOptions)}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: '#64748b',
+                  fontSize: '0.74rem',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  textDecoration: 'underline'
+                }}
+              >
+                {showDemoOptions ? 'Hide Evaluator Demo Logins' : 'Hackathon Evaluator Quick Access (One-Click)'}
+              </button>
+
+              {showDemoOptions && (
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginTop: '10px' }}>
+                  <button
+                    type="button"
+                    onClick={() => handleDemoLogin('traveler')}
+                    style={{
+                      padding: '8px 12px',
+                      background: '#f8fafc',
+                      border: '1px solid #e2e8f0',
+                      borderRadius: '8px',
+                      fontSize: '0.74rem',
+                      fontWeight: 700,
+                      color: '#0f172a',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    Demo Traveler 🧳
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleDemoLogin('operator')}
+                    style={{
+                      padding: '8px 12px',
+                      background: '#f8fafc',
+                      border: '1px solid #e2e8f0',
+                      borderRadius: '8px',
+                      fontSize: '0.74rem',
+                      fontWeight: 700,
+                      color: '#0f172a',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    Demo Operator 🏢
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         )}
 
         {/* ================= MODE: SIGNUP ================= */}
         {authMode === 'signup' && (
           <div>
-            <div style={{ textAlign: 'center', marginBottom: '20px' }}>
-              <h2 style={{ fontSize: '1.35rem', fontWeight: 800, color: '#0f172a', marginBottom: '4px' }}>
-                Join the Platform
+            <div style={{ textAlign: 'center', marginBottom: '18px' }}>
+              <h2 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0f172a', marginBottom: '4px' }}>
+                Create Your Account
               </h2>
-              <p style={{ color: '#64748b', fontSize: '0.84rem', margin: 0 }}>
-                Select your role to access specialized workspaces.
+              <p style={{ color: '#64748b', fontSize: '0.82rem', margin: 0 }}>
+                Enter your details to generate your personal travel vault.
               </p>
             </div>
 
-            {authError && (
-              <div style={{
-                background: '#fef2f2',
-                border: '1px solid #fecaca',
-                color: '#dc2626',
-                padding: '12px 16px',
-                borderRadius: '10px',
-                fontSize: '0.84rem',
-                marginBottom: '18px'
-              }}>
-                {authError}
-              </div>
-            )}
-
-            {/* Role Cards Grid */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px', marginBottom: '20px' }}>
+            {/* Role Selection Tabs */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px', marginBottom: '16px' }}>
               {roleCards.map(rc => {
                 const isSelected = selectedRole === rc.id;
                 return (
@@ -337,19 +452,15 @@ export default function LoginPage() {
                     style={{
                       background: isSelected ? '#eff6ff' : '#ffffff',
                       border: isSelected ? '2px solid #2563eb' : '1px solid #e2e8f0',
-                      borderRadius: '12px',
-                      padding: '12px 14px',
+                      borderRadius: '10px',
+                      padding: '10px 12px',
                       cursor: 'pointer',
-                      transition: 'all 0.15s ease',
-                      boxShadow: isSelected ? '0 4px 12px rgba(37, 99, 235, 0.08)' : '0 1px 2px rgba(0,0,0,0.02)'
+                      transition: 'all 0.15s ease'
                     }}
                   >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-                      <span style={{ fontSize: '1.25rem' }}>{rc.icon}</span>
-                      <span style={{ fontWeight: 800, fontSize: '0.86rem', color: '#0f172a' }}>{rc.title}</span>
-                    </div>
-                    <div style={{ fontSize: '0.72rem', color: '#64748b', lineHeight: 1.3 }}>
-                      {rc.desc}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <span style={{ fontSize: '1.1rem' }}>{rc.icon}</span>
+                      <span style={{ fontWeight: 800, fontSize: '0.84rem', color: isSelected ? '#2563eb' : '#0f172a' }}>{rc.title}</span>
                     </div>
                   </div>
                 );
@@ -357,15 +468,15 @@ export default function LoginPage() {
             </div>
 
             {/* Signup Form */}
-            <form onSubmit={handleRoleSignup} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+            <form onSubmit={handleRoleSignup} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               <div>
-                <label style={{ fontSize: '0.76rem', fontWeight: 700, color: '#334155', display: 'block', marginBottom: '4px' }}>
-                  Full Name *
+                <label style={{ fontSize: '0.74rem', fontWeight: 700, color: '#475569', display: 'block', marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                  Your Full Name *
                 </label>
                 <input
                   type="text"
                   required
-                  placeholder="e.g. Aditi Sharma"
+                  placeholder="e.g. Chirag Behere"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   style={{
@@ -383,13 +494,13 @@ export default function LoginPage() {
               </div>
 
               <div>
-                <label style={{ fontSize: '0.76rem', fontWeight: 700, color: '#334155', display: 'block', marginBottom: '4px' }}>
+                <label style={{ fontSize: '0.74rem', fontWeight: 700, color: '#475569', display: 'block', marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                   Email Address *
                 </label>
                 <input
                   type="email"
                   required
-                  placeholder="name@example.com"
+                  placeholder="you@domain.com"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   style={{
@@ -406,100 +517,54 @@ export default function LoginPage() {
                 />
               </div>
 
-              {(selectedRole === 'operator' || selectedRole === 'vendor') && (
-                <div>
-                  <label style={{ fontSize: '0.76rem', fontWeight: 700, color: '#334155', display: 'block', marginBottom: '4px' }}>
-                    {selectedRole === 'operator' ? 'Tour Agency / Organization Name *' : 'Business / Hotel Property Name *'}
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    placeholder={selectedRole === 'operator' ? 'e.g. Celestial Heritage Expeditions' : 'e.g. Taj Exotica / DiveGoa'}
-                    value={formData.organization}
-                    onChange={(e) => setFormData({ ...formData, organization: e.target.value })}
-                    style={{
-                      width: '100%',
-                      padding: '10px 14px',
-                      borderRadius: '8px',
-                      background: '#f8fafc',
-                      border: '1px solid #cbd5e1',
-                      color: '#0f172a',
-                      fontSize: '0.86rem',
-                      outline: 'none',
-                      boxSizing: 'border-box'
-                    }}
-                  />
-                </div>
-              )}
-
-              {selectedRole === 'coordinator' && (
-                <div>
-                  <label style={{ fontSize: '0.76rem', fontWeight: 700, color: '#334155', display: 'block', marginBottom: '4px' }}>
-                    Assigned Region / Base
-                  </label>
-                  <select
-                    value={formData.region}
-                    onChange={(e) => setFormData({ ...formData, region: e.target.value })}
-                    style={{
-                      width: '100%',
-                      padding: '10px 12px',
-                      borderRadius: '8px',
-                      background: '#f8fafc',
-                      border: '1px solid #cbd5e1',
-                      color: '#0f172a',
-                      fontSize: '0.84rem',
-                      outline: 'none',
-                      boxSizing: 'border-box'
-                    }}
-                  >
-                    <option value="Goa & Western Coast">Goa & Western Coast</option>
-                    <option value="Manali & Himachal">Manali & Himachal</option>
-                    <option value="Rajasthan Royal Circuits">Rajasthan Royal Circuits</option>
-                    <option value="Kerala Backwaters & Munnar">Kerala Backwaters & Munnar</option>
-                  </select>
-                </div>
-              )}
+              <div>
+                <label style={{ fontSize: '0.74rem', fontWeight: 700, color: '#475569', display: 'block', marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                  Create Password * (min 6 characters)
+                </label>
+                <input
+                  type="password"
+                  required
+                  minLength={6}
+                  placeholder="••••••••"
+                  value={formData.password}
+                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                  style={{
+                    width: '100%',
+                    padding: '10px 14px',
+                    borderRadius: '8px',
+                    background: '#f8fafc',
+                    border: '1px solid #cbd5e1',
+                    color: '#0f172a',
+                    fontSize: '0.86rem',
+                    outline: 'none',
+                    boxSizing: 'border-box'
+                  }}
+                />
+              </div>
 
               <button
                 type="submit"
                 disabled={isSubmitting}
                 style={{
-                  padding: '12px 18px',
-                  borderRadius: '10px',
-                  background: '#2563eb',
+                  width: '100%',
+                  padding: '12px',
+                  borderRadius: '999px',
+                  background: 'linear-gradient(135deg, #2563eb, #1d4ed8)',
                   color: '#ffffff',
-                  fontSize: '0.9rem',
                   fontWeight: 800,
+                  fontSize: '0.92rem',
                   border: 'none',
                   cursor: 'pointer',
                   boxShadow: '0 4px 14px rgba(37, 99, 235, 0.3)',
-                  marginTop: '8px',
-                  transition: 'all 0.15s ease'
+                  marginTop: '6px'
                 }}
               >
-                {isSubmitting ? 'Registering...' : `Sign Up as ${roleCards.find(r => r.id === selectedRole)?.title}`}
+                {isSubmitting ? 'Creating Account...' : `Register as ${selectedRole === 'operator' ? 'Operator' : 'Traveler'}`}
               </button>
-
-              <div style={{ textAlign: 'center', marginTop: '6px' }}>
-                <Link href="/signup" style={{ color: '#2563eb', fontSize: '0.78rem', fontWeight: 600, textDecoration: 'none' }}>
-                  Need more role customization? Open Full Registration Portal →
-                </Link>
-              </div>
             </form>
           </div>
         )}
 
-        {/* Footer info */}
-        <div style={{
-          marginTop: '28px',
-          paddingTop: '20px',
-          borderTop: '1px solid #f1f5f9',
-          textAlign: 'center',
-          fontSize: '0.78rem',
-          color: '#64748b'
-        }}>
-          Protected by role-based RBAC authentication and enterprise TLS encryption.
-        </div>
       </div>
     </div>
   );

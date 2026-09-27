@@ -144,16 +144,6 @@ export default function TravelerNav({ transparent = false }) {
                 <span style={{ fontSize: '0.9rem' }}>👤</span>
                 <span>{user.displayName?.split(' ')[0] || 'My Account'}</span>
               </Link>
-              {user.role === 'operator' && (
-                <Link href="/operator/dashboard" style={{
-                  display: 'inline-flex', alignItems: 'center', gap: '6px',
-                  padding: '7px 14px', background: '#0f172a', color: '#fff',
-                  fontSize: '0.82rem', fontWeight: 700, borderRadius: '999px',
-                  textDecoration: 'none', transition: 'all 0.2s',
-                }}>
-                  Console ↗
-                </Link>
-              )}
               <button onClick={logout} style={{
                 display: 'inline-flex', alignItems: 'center', gap: '6px',
                 padding: '7px 12px', background: transparent ? 'rgba(0,0,0,0.3)' : '#f1f5f9', 
@@ -350,27 +340,6 @@ export default function TravelerNav({ transparent = false }) {
                 >
                   <span>👤 My Account & Travel History</span>
                 </Link>
-
-                {user.role === 'operator' && (
-                  <Link
-                    href="/operator/dashboard"
-                    onClick={() => setMobileMenuOpen(false)}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      padding: '12px',
-                      borderRadius: '12px',
-                      background: '#0f172a',
-                      color: '#ffffff',
-                      fontWeight: 700,
-                      fontSize: '0.92rem',
-                      textDecoration: 'none'
-                    }}
-                  >
-                    Open Operator Console ↗
-                  </Link>
-                )}
 
                 <button
                   onClick={() => {

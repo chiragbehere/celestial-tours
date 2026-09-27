@@ -7,8 +7,8 @@ import { useAuth } from '@/lib/context/AuthContext';
 import { CheckCircleIcon, SparklesIcon, ShieldCheckIcon, BuildingIcon, SuitcaseIcon, CompassIcon, HouseDoorIcon, PlaneIcon } from '@/components/ui/Icons';
 
 export default function SignUpPage() {
-  const { user, signUpWithRole, loading } = useAuth();
-  const [selectedRole, setSelectedRole] = useState('operator'); // 'traveler' | 'operator' | 'coordinator' | 'vendor'
+  const { user, signUpWithEmail, loading } = useAuth();
+  const [selectedRole, setSelectedRole] = useState('traveler'); // 'traveler' | 'operator'
   const [authError, setAuthError] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
@@ -17,6 +17,7 @@ export default function SignUpPage() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    password: '',
     phone: '',
     // Operator fields
     agencyName: '',
@@ -33,38 +34,47 @@ export default function SignUpPage() {
     if (!loading && user) {
       const timer = setTimeout(() => {
         if (user.role === 'operator') router.push('/operator/dashboard');
-        else router.push('/');
+        else router.push('/account');
       }, 50);
       return () => clearTimeout(timer);
     }
   }, [user, loading, router]);
 
-  const handleRoleSignup = (e) => {
+  const handleRoleSignup = async (e) => {
     e.preventDefault();
     setAuthError(null);
     setIsSubmitting(true);
 
+    if (!formData.name?.trim()) {
+      setAuthError('Please enter your full name.');
+      setIsSubmitting(false);
+      return;
+    }
+    if (!formData.email?.trim()) {
+      setAuthError('Please enter your email address.');
+      setIsSubmitting(false);
+      return;
+    }
+    if (!formData.password || formData.password.length < 6) {
+      setAuthError('Password must be at least 6 characters long.');
+      setIsSubmitting(false);
+      return;
+    }
+
     try {
-      let displayName = formData.name;
-      let roleTitle = 'Platform Member';
-
-      if (selectedRole === 'operator') {
-        displayName = formData.name || 'Aditi Sharma';
-        roleTitle = `${formData.agencyName || 'Incredible Tours'} Lead Operator`;
-      } else {
-        displayName = formData.name || 'Priya Sharma';
-        roleTitle = 'Explorer & Traveler';
-      }
-
-      signUpWithRole(
-        displayName,
-        formData.email || `${selectedRole}@celestialtours.com`,
-        selectedRole,
-        roleTitle
+      const res = await signUpWithEmail(
+        formData.email.trim(),
+        formData.password,
+        formData.name.trim(),
+        selectedRole
       );
 
-      if (selectedRole === 'operator') router.push('/operator/dashboard');
-      else router.push('/');
+      if (!res.success) {
+        setAuthError(res.error || 'Failed to create account.');
+      } else {
+        if (selectedRole === 'operator') router.push('/operator/dashboard');
+        else router.push('/account');
+      }
     } catch (err) {
       setAuthError(err.message || 'Error signing up');
     } finally {
@@ -256,6 +266,31 @@ export default function SignUpPage() {
                 }}
               />
             </div>
+          </div>
+
+          <div>
+            <label style={{ fontSize: '0.76rem', fontWeight: 700, color: '#334155', display: 'block', marginBottom: '6px' }}>
+              Create Password * (min 6 characters)
+            </label>
+            <input
+              type="password"
+              required
+              minLength={6}
+              placeholder="••••••••"
+              value={formData.password}
+              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+              style={{
+                width: '100%',
+                padding: '11px 14px',
+                borderRadius: '10px',
+                background: '#f8fafc',
+                border: '1px solid #cbd5e1',
+                color: '#0f172a',
+                fontSize: '0.86rem',
+                outline: 'none',
+                boxSizing: 'border-box'
+              }}
+            />
           </div>
 
           <div>

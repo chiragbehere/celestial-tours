@@ -25,13 +25,13 @@ export default function TravelerAccountPage() {
   const [formData, setFormData] = useState({
     displayName: '',
     email: '',
-    phone: '+91 98201 54321',
-    city: 'Mumbai, Maharashtra',
+    phone: '',
+    city: 'India',
     travelStyle: 'Luxury & Wellness',
     pace: 'Balanced (2-3 curated activities/day)',
     dietary: 'Vegetarian',
-    emergencyContactName: 'Rohan Sharma',
-    emergencyContactPhone: '+91 98110 87654'
+    emergencyContactName: '',
+    emergencyContactPhone: ''
   });
 
   const [isSaving, setIsSaving] = useState(false);
@@ -44,18 +44,17 @@ export default function TravelerAccountPage() {
   // Sync formData with user
   useEffect(() => {
     if (user) {
-      setFormData(prev => ({
-        ...prev,
-        displayName: user.displayName || 'Aditi Sharma',
-        email: user.email || 'aditi.sharma@traveler.in',
-        phone: user.phone || prev.phone,
-        city: user.city || prev.city,
-        travelStyle: user.travelStyle || prev.travelStyle,
-        pace: user.pace || prev.pace,
-        dietary: user.dietary || prev.dietary,
-        emergencyContactName: user.emergencyContactName || prev.emergencyContactName,
-        emergencyContactPhone: user.emergencyContactPhone || prev.emergencyContactPhone
-      }));
+      setFormData({
+        displayName: user.displayName || '',
+        email: user.email || '',
+        phone: user.phone || '',
+        city: user.city || 'India',
+        travelStyle: user.travelStyle || 'Luxury & Wellness',
+        pace: user.pace || 'Balanced (2-3 curated activities/day)',
+        dietary: user.dietary || 'Vegetarian',
+        emergencyContactName: user.emergencyContactName || '',
+        emergencyContactPhone: user.emergencyContactPhone || ''
+      });
     }
   }, [user]);
 
@@ -223,7 +222,7 @@ export default function TravelerAccountPage() {
                 boxShadow: '0 8px 24px rgba(37, 99, 235, 0.4)',
                 border: '3px solid rgba(255, 255, 255, 0.2)'
               }}>
-                {(formData.displayName?.[0] || user?.displayName?.[0] || 'A').toUpperCase()}
+                {(user?.displayName?.[0] || 'U').toUpperCase()}
               </div>
 
               <div>
@@ -235,7 +234,7 @@ export default function TravelerAccountPage() {
                     fontFamily: "'Playfair Display', Georgia, serif",
                     color: '#ffffff'
                   }}>
-                    {formData.displayName || 'Aditi Sharma'}
+                    {user?.displayName || 'Traveler Account'}
                   </h1>
                   <span style={{
                     fontSize: '0.72rem',
@@ -246,11 +245,11 @@ export default function TravelerAccountPage() {
                     color: '#b45309',
                     border: '1px solid #fde68a'
                   }}>
-                    ★ Celestial Voyager · Gold
+                    ★ Verified Explorer
                   </span>
                 </div>
                 <p style={{ margin: '4px 0 0', fontSize: '0.84rem', color: '#94a3b8' }}>
-                  {formData.email || 'aditi.sharma@traveler.in'} • {formData.city} • Member since Oct 2025
+                  {user?.email || 'Sign in to access your profile & itineraries'}
                 </p>
               </div>
             </div>
@@ -259,15 +258,15 @@ export default function TravelerAccountPage() {
             <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
               <div style={{ background: 'rgba(255, 255, 255, 0.08)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255, 255, 255, 0.12)', padding: '10px 18px', borderRadius: '12px', textAlign: 'center' }}>
                 <div style={{ fontSize: '0.68rem', color: '#94a3b8', textTransform: 'uppercase', fontWeight: 700 }}>Total Journeys</div>
-                <div style={{ fontSize: '1.25rem', fontWeight: 800, color: '#38bdf8', marginTop: '1px' }}>3 Tours</div>
+                <div style={{ fontSize: '1.25rem', fontWeight: 800, color: '#38bdf8', marginTop: '1px' }}>{user ? '2 Active' : '0'}</div>
               </div>
               <div style={{ background: 'rgba(255, 255, 255, 0.08)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255, 255, 255, 0.12)', padding: '10px 18px', borderRadius: '12px', textAlign: 'center' }}>
-                <div style={{ fontSize: '0.68rem', color: '#94a3b8', textTransform: 'uppercase', fontWeight: 700 }}>Vouchers Issued</div>
-                <div style={{ fontSize: '1.25rem', fontWeight: 800, color: '#34d399', marginTop: '1px' }}>15 Active</div>
+                <div style={{ fontSize: '0.68rem', color: '#94a3b8', textTransform: 'uppercase', fontWeight: 700 }}>Vouchers Vault</div>
+                <div style={{ fontSize: '1.25rem', fontWeight: 800, color: '#34d399', marginTop: '1px' }}>{user ? '5 Synced' : '0'}</div>
               </div>
               <div style={{ background: 'rgba(255, 255, 255, 0.08)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255, 255, 255, 0.12)', padding: '10px 18px', borderRadius: '12px', textAlign: 'center' }}>
-                <div style={{ fontSize: '0.68rem', color: '#94a3b8', textTransform: 'uppercase', fontWeight: 700 }}>Verified Status</div>
-                <div style={{ fontSize: '1.25rem', fontWeight: 800, color: '#fbbf24', marginTop: '1px' }}>ID Verified</div>
+                <div style={{ fontSize: '0.68rem', color: '#94a3b8', textTransform: 'uppercase', fontWeight: 700 }}>Account Status</div>
+                <div style={{ fontSize: '1.25rem', fontWeight: 800, color: '#fbbf24', marginTop: '1px' }}>{user ? 'Active' : 'Guest'}</div>
               </div>
             </div>
           </div>
@@ -277,61 +276,76 @@ export default function TravelerAccountPage() {
       {/* ═══════════════════════════════════════════════
           MAIN ACCOUNT WORKSPACE
       ═══════════════════════════════════════════════ */}
-      <main className="responsive-main-container">
-        {!user && (
+      {!user ? (
+        <main className="responsive-main-container">
           <div style={{
-            background: '#fffbeb',
-            border: '1px solid #fde68a',
-            padding: '16px 20px',
-            borderRadius: '16px',
-            marginBottom: '24px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-            gap: '12px'
+            background: '#ffffff',
+            borderRadius: '24px',
+            border: '1px solid #e2e8f0',
+            padding: '52px 32px',
+            maxWidth: '520px',
+            margin: '36px auto',
+            textAlign: 'center',
+            boxShadow: '0 12px 40px rgba(15, 23, 42, 0.06)'
           }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <span style={{ fontSize: '1.2rem' }}>👋</span>
-              <div>
-                <strong style={{ color: '#92400e', fontSize: '0.92rem' }}>You are viewing demo traveler profile.</strong>
-                <div style={{ fontSize: '0.8rem', color: '#b45309' }}>Log in to sync with your personal Google or email account.</div>
-              </div>
+            <div style={{
+              width: '64px',
+              height: '64px',
+              borderRadius: '50%',
+              background: '#eff6ff',
+              color: '#2563eb',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: '0 auto 18px'
+            }}>
+              <SuitcaseIcon size={32} />
             </div>
-            <div style={{ display: 'flex', gap: '8px' }}>
-              <button
-                type="button"
-                onClick={() => loginAsDemo('traveler')}
-                style={{
-                  padding: '8px 16px',
-                  borderRadius: '999px',
-                  background: '#f59e0b',
-                  color: '#ffffff',
-                  fontWeight: 700,
-                  fontSize: '0.8rem',
-                  border: 'none',
-                  cursor: 'pointer'
-                }}
-              >
-                Load Demo Traveler
-              </button>
+
+            <h2 style={{ fontSize: '1.45rem', fontWeight: 800, color: '#0f172a', marginBottom: '8px' }}>
+              Sign In to Your Traveler Account
+            </h2>
+            <p style={{ color: '#64748b', fontSize: '0.88rem', lineHeight: 1.6, marginBottom: '28px' }}>
+              Create an account or sign in with your email and password to view your customized bookings, download vouchers, and manage your travel preferences.
+            </p>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', maxWidth: '320px', margin: '0 auto' }}>
               <Link
                 href="/login"
                 style={{
-                  padding: '8px 16px',
+                  padding: '13px 24px',
                   borderRadius: '999px',
-                  background: '#0f172a',
+                  background: 'linear-gradient(135deg, #2563eb, #1d4ed8)',
                   color: '#ffffff',
+                  fontWeight: 800,
+                  fontSize: '0.92rem',
+                  textDecoration: 'none',
+                  boxShadow: '0 4px 14px rgba(37, 99, 235, 0.3)'
+                }}
+              >
+                Sign In With Email & Password
+              </Link>
+
+              <Link
+                href="/signup"
+                style={{
+                  padding: '13px 24px',
+                  borderRadius: '999px',
+                  background: '#f8fafc',
+                  color: '#0f172a',
+                  border: '1.5px solid #cbd5e1',
                   fontWeight: 700,
-                  fontSize: '0.8rem',
+                  fontSize: '0.92rem',
                   textDecoration: 'none'
                 }}
               >
-                Sign In
+                Create Free Account
               </Link>
             </div>
           </div>
-        )}
+        </main>
+      ) : (
+        <main className="responsive-main-container">
 
         <div className="responsive-two-col-grid">
           
@@ -897,6 +911,7 @@ export default function TravelerAccountPage() {
 
         </div>
       </main>
+      )}
     </div>
   );
 }
