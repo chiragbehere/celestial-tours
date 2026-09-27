@@ -27,14 +27,19 @@ export default function OperatorSimulationPage() {
       if (data.success) {
         setNotification({
           type: 'success',
-          message: `Disruption successfully injected into active tour plan (${disruptionPayload.destination}). Alert is now active in Disruption Shield.`
+          message: `Disruption scenario successfully synchronized with live database (${disruptionPayload.destination || 'Goa'}). Alert is active in Disruption Shield.`
+        });
+      } else {
+        setNotification({
+          type: 'error',
+          message: data.error || 'Database rejected the simulation update.'
         });
       }
     } catch (e) {
       console.error(e);
       setNotification({
         type: 'error',
-        message: 'Failed to synchronize with live database.'
+        message: 'Network error connecting to simulation service.'
       });
     }
   };

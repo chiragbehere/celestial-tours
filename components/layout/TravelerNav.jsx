@@ -20,7 +20,8 @@ export default function TravelerNav({ transparent = false }) {
     { href: '/', label: 'Holiday Packages' },
     { href: '/plan', label: 'AI Trip Planner' },
     { href: '/discover', label: 'Destinations' },
-    { href: '/trip/tour-goa-signature', label: 'Live Trip Companion' },
+    { href: '/account', label: 'My Account & Trips' },
+    { href: '/trip/tour-goa-signature', label: 'Live Companion' },
   ];
 
   return (
@@ -130,21 +131,35 @@ export default function TravelerNav({ transparent = false }) {
               </Link>
             </div>
           ) : (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <Link href="/account" style={{
+                display: 'inline-flex', alignItems: 'center', gap: '6px',
+                padding: '7px 14px', 
+                background: transparent ? 'rgba(255,255,255,0.18)' : '#eff6ff', 
+                color: transparent ? '#ffffff' : '#2563eb',
+                border: transparent ? '1px solid rgba(255,255,255,0.3)' : '1px solid #bfdbfe',
+                fontSize: '0.82rem', fontWeight: 700, borderRadius: '999px',
+                textDecoration: 'none', transition: 'all 0.15s',
+              }}>
+                <span style={{ fontSize: '0.9rem' }}>👤</span>
+                <span>{user.displayName?.split(' ')[0] || 'My Account'}</span>
+              </Link>
               {user.role === 'operator' && (
                 <Link href="/operator/dashboard" style={{
                   display: 'inline-flex', alignItems: 'center', gap: '6px',
-                  padding: '9px 18px', background: '#0f172a', color: '#fff',
-                  fontSize: '0.84rem', fontWeight: 700, borderRadius: '999px',
+                  padding: '7px 14px', background: '#0f172a', color: '#fff',
+                  fontSize: '0.82rem', fontWeight: 700, borderRadius: '999px',
                   textDecoration: 'none', transition: 'all 0.2s',
                 }}>
-                  Operator Console
+                  Console ↗
                 </Link>
               )}
               <button onClick={logout} style={{
                 display: 'inline-flex', alignItems: 'center', gap: '6px',
-                padding: '8px 16px', background: '#f1f5f9', color: '#334155',
-                border: '1px solid #e2e8f0', fontSize: '0.84rem', fontWeight: 700, borderRadius: '999px',
+                padding: '7px 12px', background: transparent ? 'rgba(0,0,0,0.3)' : '#f1f5f9', 
+                color: transparent ? '#ffffff' : '#334155',
+                border: transparent ? '1px solid rgba(255,255,255,0.2)' : '1px solid #e2e8f0', 
+                fontSize: '0.82rem', fontWeight: 700, borderRadius: '999px',
                 cursor: 'pointer', transition: 'all 0.2s',
               }}>
                 Log Out
@@ -314,6 +329,27 @@ export default function TravelerNav({ transparent = false }) {
                     <div style={{ fontSize: '0.72rem', color: '#64748b' }}>Role: {user.role === 'operator' ? 'Tour Operator' : 'Traveler'}</div>
                   </div>
                 </div>
+
+                <Link
+                  href="/account"
+                  onClick={() => setMobileMenuOpen(false)}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '8px',
+                    padding: '12px',
+                    borderRadius: '12px',
+                    background: 'linear-gradient(135deg, #2563eb, #1d4ed8)',
+                    color: '#ffffff',
+                    fontWeight: 700,
+                    fontSize: '0.92rem',
+                    textDecoration: 'none',
+                    boxShadow: '0 4px 12px rgba(37, 99, 235, 0.25)'
+                  }}
+                >
+                  <span>👤 My Account & Travel History</span>
+                </Link>
 
                 {user.role === 'operator' && (
                   <Link

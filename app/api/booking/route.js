@@ -83,3 +83,34 @@ export async function POST(req) {
     return NextResponse.json({ error: 'Booking creation failed' }, { status: 500 });
   }
 }
+
+export async function GET(req) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const email = searchParams.get('email');
+    const tourPlanId = searchParams.get('tour_plan_id');
+
+    let bookings = db.getAllBookings();
+    if (tourPlanId) {
+      bookings = bookings.filter(b => b.tour_plan_id === tourPlanId);
+    }
+    if (email) {
+      bookings = bookings.filter(b => 
+        b.traveler_email?.toLowerCase() === email.toLowerCase() ||
+        b.traveler_name?.toLowerCase().includes(email.split('@')[0].toLowerCase())
+      );
+    }
+
+    const tourPlans = db.getTourPlans();
+
+    return NextResponse.json({
+      success: true,
+      bookings,
+      tourPlans
+    });
+  } catch (err) {
+    console.error('Error fetching bookings:', err);
+    return NextResponse.json({ error: 'Failed to fetch bookings' }, { status: 500 });
+  }
+}
+
