@@ -179,13 +179,7 @@ export default function BookPage({ params }) {
       {/* ═══════════════════════════════════════════════
           CINEMATIC HERO HEADER
       ═══════════════════════════════════════════════ */}
-      <section style={{
-        position: 'relative',
-        padding: '140px 24px 60px',
-        color: '#ffffff',
-        overflow: 'hidden',
-        background: '#050b14'
-      }}>
+      <section className="compact-hero-section">
         <div
           className="hero-kenburns-bg"
           style={{
@@ -219,7 +213,7 @@ export default function BookPage({ params }) {
 
       <TourLifecycleTracker currentStage="book" />
 
-      <main style={{ maxWidth: '1240px', margin: '0 auto', padding: '36px 24px 80px' }}>
+      <main className="responsive-main-container">
         {bookingConfirmed ? (
           /* Luxury Voucher Confirmation */
           <div style={{
@@ -380,7 +374,7 @@ export default function BookPage({ params }) {
           </div>
         ) : (
           /* Checkout & Customization Screen */
-          <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1.8fr) minmax(0, 1.2fr)', gap: '32px' }}>
+          <div className="responsive-checkout-grid">
             {/* Left Column: Customization Controls & Payment Form */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
               {/* Flexible Customization Card */}
@@ -624,7 +618,7 @@ export default function BookPage({ params }) {
                         onChange={(e) => setName(e.target.value)}
                       />
                     </div>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                    <div className="responsive-form-two-col">
                       <div>
                         <label style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', color: '#64748b', display: 'block', marginBottom: '6px', letterSpacing: '0.04em' }}>
                           Email (for e-vouchers)

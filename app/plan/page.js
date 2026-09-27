@@ -192,8 +192,8 @@ function PlanContent() {
       ═══════════════════════════════════════════════ */}
       <section style={{
         position: 'relative',
-        minHeight: '580px',
-        padding: '150px 24px 70px',
+        minHeight: '420px',
+        padding: '95px 24px 50px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',

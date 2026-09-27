@@ -94,13 +94,7 @@ export default function TripReviewPage({ params }) {
       {/* ═══════════════════════════════════════════════
           CINEMATIC HERO HEADER — Matches Home & VisitTheUSA
       ═══════════════════════════════════════════════ */}
-      <section style={{
-        position: 'relative',
-        padding: '150px 24px 70px',
-        color: '#ffffff',
-        overflow: 'hidden',
-        background: '#050b14'
-      }}>
+      <section className="compact-hero-section">
         {/* Ken Burns Scenic Backdrop */}
         <div
           className="hero-kenburns-bg"
@@ -176,7 +170,7 @@ export default function TripReviewPage({ params }) {
 
       <TourLifecycleTracker currentStage="review" />
 
-      <main style={{ maxWidth: '1200px', margin: '0 auto', padding: '40px 24px 80px' }}>
+      <main className="responsive-main-container">
         {/* Certificate Card */}
         <div style={{
           background: '#ffffff',
@@ -208,7 +202,7 @@ export default function TripReviewPage({ params }) {
         </div>
 
         {/* 2-Column: Left = Review Form, Right = Verified Reviews Feed */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1.4fr) minmax(0, 1fr)', gap: '32px' }}>
+        <div className="responsive-two-col-grid">
           
           {/* Review Form */}
           <div style={{

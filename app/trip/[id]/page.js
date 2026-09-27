@@ -149,13 +149,7 @@ export default function TripDashboardPage({ params }) {
       {/* ═══════════════════════════════════════════════
           CINEMATIC HERO HEADER — Matches Home & VisitTheUSA
       ═══════════════════════════════════════════════ */}
-      <section style={{
-        position: 'relative',
-        padding: '150px 24px 70px',
-        color: '#ffffff',
-        overflow: 'hidden',
-        background: '#050b14'
-      }}>
+      <section className="compact-hero-section">
         {/* Ken Burns Scenic Backdrop */}
         <div
           className="hero-kenburns-bg"
@@ -275,7 +269,7 @@ export default function TripDashboardPage({ params }) {
       <TourLifecycleTracker currentStage="assist" />
 
       {/* Main Content Area */}
-      <main style={{ maxWidth: '1240px', margin: '0 auto', padding: '36px 24px 80px' }}>
+      <main className="responsive-main-container">
         
         {/* Top Status Capsule Grid */}
         <div style={{
@@ -365,7 +359,7 @@ export default function TripDashboardPage({ params }) {
         </div>
 
         {/* Two Columns: Left = In-Trip Concierge AI Chat, Right = Today's Timeline & Prep Checklist */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1.4fr) minmax(0, 1fr)', gap: '32px' }}>
+        <div className="responsive-two-col-grid">
           
           {/* Left Column: In-Trip Assistant Chat */}
           <div style={{

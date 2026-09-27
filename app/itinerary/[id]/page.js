@@ -180,13 +180,7 @@ export default function ItineraryPage({ params }) {
       {/* ═══════════════════════════════════════════════
           CINEMATIC HERO HEADER — Matches Home & VisitTheUSA
       ═══════════════════════════════════════════════ */}
-      <section style={{
-        position: 'relative',
-        padding: '150px 24px 70px',
-        color: '#ffffff',
-        overflow: 'hidden',
-        background: '#050b14'
-      }}>
+      <section className="compact-hero-section">
         {/* Ken Burns Scenic Backdrop */}
         <div
           className="hero-kenburns-bg"
@@ -291,7 +285,7 @@ export default function ItineraryPage({ params }) {
       {/* Tour Lifecycle Progress Tracker (Sits right beneath hero) */}
       <TourLifecycleTracker currentStage="plan" />
 
-      <main className="container" style={{ padding: '36px 24px 80px', maxWidth: '1240px', margin: '0 auto' }}>
+      <main className="responsive-main-container">
 
         {/* ── Disruption Shield Alert Banner ────────────── */}
         {latestDisruption && (

@@ -249,7 +249,7 @@ export default function DestinationDetailPage({ params }) {
       {/* ═══════════════════════════════════════════════
           CONTENT MAIN CONTAINER
       ═══════════════════════════════════════════════ */}
-      <main style={{ maxWidth: '1240px', margin: '0 auto', padding: '60px 24px 100px' }}>
+      <main className="responsive-main-container">
         {/* Story Section */}
         <div style={{
           background: '#ffffff',

@@ -65,8 +65,8 @@ export default function DiscoverPage() {
       ═══════════════════════════════════════════════ */}
       <section style={{
         position: 'relative',
-        minHeight: '650px',
-        padding: '160px 24px 80px',
+        minHeight: '460px',
+        padding: '100px 20px 50px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -286,7 +286,7 @@ export default function DiscoverPage() {
           SECTION 2: 3D ANIMATED DESTINATIONS GRID
           Matches home.css .dest-grid & .dest-card 3D perspective
       ═══════════════════════════════════════════════ */}
-      <section id="destinations-catalog" className="destinations-section" style={{ background: '#f8fafc', padding: '60px 24px 100px' }}>
+      <section id="destinations-catalog" className="destinations-section" style={{ background: '#f8fafc', padding: '36px 20px 80px' }}>
         <div style={{ maxWidth: '1240px', margin: '0 auto' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '36px', flexWrap: 'wrap', gap: '16px' }}>
             <div>

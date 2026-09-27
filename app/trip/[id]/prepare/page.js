@@ -42,13 +42,7 @@ export default function TripPreparePage({ params }) {
       {/* ═══════════════════════════════════════════════
           CINEMATIC HERO HEADER — Matches Home & VisitTheUSA
       ═══════════════════════════════════════════════ */}
-      <section style={{
-        position: 'relative',
-        padding: '150px 24px 70px',
-        color: '#ffffff',
-        overflow: 'hidden',
-        background: '#050b14'
-      }}>
+      <section className="compact-hero-section">
         {/* Ken Burns Scenic Backdrop */}
         <div
           className="hero-kenburns-bg"
@@ -119,7 +113,7 @@ export default function TripPreparePage({ params }) {
 
       <TourLifecycleTracker currentStage="prepare" />
 
-      <main style={{ maxWidth: '1200px', margin: '0 auto', padding: '40px 24px 80px' }}>
+      <main className="responsive-main-container">
 
         {/* Readiness Meter Card */}
         <div style={{
@@ -161,7 +155,7 @@ export default function TripPreparePage({ params }) {
         </div>
 
         {/* 2-Column Content */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1.4fr) minmax(0, 1fr)', gap: '28px' }}>
+        <div className="responsive-two-col-grid">
           
           {/* Left: Dynamic Packing Checklist */}
           <div style={{

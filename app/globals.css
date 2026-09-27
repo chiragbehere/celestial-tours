@@ -1454,6 +1454,76 @@ input, select, textarea { font-family: inherit; }
   color: #2563eb !important;
 }
 
+/* ==========================================================================
+   RESPONSIVE TWO-COLUMN & COMPACT HERO UTILITIES
+   Eliminates excessive vertical stretching on PC & fixes mobile squishing
+   ========================================================================== */
+
+.compact-hero-section {
+  position: relative;
+  padding: 85px 24px 34px !important;
+  color: #ffffff;
+  overflow: hidden;
+  background: #050b14;
+}
+
+@media (max-width: 768px) {
+  .compact-hero-section {
+    padding: 75px 16px 24px !important;
+  }
+}
+
+.responsive-two-col-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: 28px;
+}
+
+@media (max-width: 960px) {
+  .responsive-two-col-grid {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+}
+
+.responsive-checkout-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1.2fr);
+  gap: 28px;
+}
+
+@media (max-width: 960px) {
+  .responsive-checkout-grid {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+}
+
+.responsive-main-container {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 32px 24px 70px;
+}
+
+@media (max-width: 768px) {
+  .responsive-main-container {
+    padding: 20px 16px 50px !important;
+  }
+}
+
+.responsive-form-two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+@media (max-width: 640px) {
+  .responsive-form-two-col {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+}
+
 /* Operator Portal Responsive Drawer */
 @media (max-width: 1023px) {
   .operator-mobile-hamburger {
