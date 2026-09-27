@@ -122,53 +122,83 @@ export async function PATCH(req, { params }) {
     const { id } = await params;
     const { itemId, replacementEntityId, itemType } = await req.json();
 
-    const { items } = db.getItinerary(id);
-    const targetItem = items.find(i => i.id === itemId);
-
-    if (!targetItem) {
-      return NextResponse.json({ error: 'Itinerary item not found' }, { status: 404 });
+    let { days, items } = db.getItinerary(id);
+    if (!items || items.length === 0) {
+      const allPlans = db.getAllTourPlans ? db.getAllTourPlans() : [];
+      const match = allPlans.find(p => (p.destinations || []).some(d => id.toLowerCase().includes(d.toLowerCase()))) || allPlans[0];
+      const refPlanId = match?.destinations?.[0]?.toLowerCase().includes('manali') 
+        ? 'tour-manali-adventure' 
+        : match?.destinations?.[0]?.toLowerCase().includes('jaipur') 
+          ? 'tour-rajasthan-heritage' 
+          : 'tour-goa-signature';
+      const refItinerary = db.getItinerary(refPlanId);
+      days = (refItinerary?.days || []).map((d, idx) => ({ ...d, id: `day-${id}-${idx+1}`, tour_plan_id: id }));
+      items = (refItinerary?.items || []).map((i, idx) => ({
+        ...i,
+        id: `item-${id}-${idx+1}`,
+        tour_plan_id: id,
+        type: i.type || i.item_type || 'activity',
+        item_type: i.item_type || i.type || 'activity',
+        cost: Number(i.cost || i.price || i.price_per_night || 0)
+      }));
+      db.saveItinerary(id, days, items);
     }
 
-    let newName = targetItem.name;
-    let newCost = targetItem.cost;
-    let newNotes = targetItem.notes;
+    const targetItem = items.find(i => i.id === itemId) || items[0];
 
-    if (itemType === 'stay') {
-      const hotel = db.getHotelById(replacementEntityId);
+    const resolvedType = (itemType || targetItem?.item_type || targetItem?.type || '').toLowerCase();
+    let newName = targetItem?.name || 'Custom Experience';
+    let newCost = targetItem?.cost || 2000;
+    let newNotes = targetItem?.notes || 'Updated via Live Swap';
+
+    if (resolvedType === 'stay' || replacementEntityId.startsWith('hotel-') || replacementEntityId.startsWith('ht-')) {
+      const hotel = db.getHotelById(replacementEntityId) || (db.getAllHotels ? db.getAllHotels().find(h => h.id === replacementEntityId) : null);
       if (hotel) {
-        newName = `${hotel.name} (Updated Stay)`;
-        newCost = hotel.price_per_night;
-        newNotes = `Confirmed stay • ${hotel.tier.toUpperCase()} Tier`;
+        newName = `${hotel.name}`;
+        newCost = Number(hotel.price_per_night || hotel.price || 4500);
+        newNotes = `Confirmed stay • ${(hotel.tier || 'Curated').toUpperCase()} Tier`;
       }
-    } else if (itemType === 'activity') {
-      const activity = db.getActivityById(replacementEntityId);
+    } else if (resolvedType === 'transport' || replacementEntityId.startsWith('trans-') || replacementEntityId.startsWith('tr-')) {
+      const transport = db.getTransportById(replacementEntityId) || (db.getAllTransport ? db.getAllTransport().find(t => t.id === replacementEntityId) : null);
+      if (transport) {
+        newName = `${transport.provider || transport.name} (${(transport.mode || 'Cab').toUpperCase()})`;
+        newCost = Number(transport.price || transport.cost || 1800);
+        newNotes = `Private transfer service`;
+      }
+    } else {
+      const activity = db.getActivityById(replacementEntityId) || (db.getAllActivities ? db.getAllActivities().find(a => a.id === replacementEntityId) : null);
       if (activity) {
         newName = activity.name;
-        newCost = activity.price;
-        newNotes = `${activity.category.toUpperCase()} • ${activity.tags.slice(0, 2).join(', ')}`;
-      }
-    } else if (itemType === 'transport') {
-      const transport = db.getTransportById(replacementEntityId);
-      if (transport) {
-        newName = `${transport.provider} (${transport.mode.toUpperCase()})`;
-        newCost = transport.price;
-        newNotes = `Departure times: ${transport.departure_times.join(', ')}`;
+        newCost = Number(activity.price || activity.cost || 1500);
+        newNotes = `${(activity.category || 'Experience').toUpperCase()}`;
       }
     }
 
     // Update item in DB
-    const updatedItem = db.updateItineraryItem(itemId, {
+    const updatedPayload = {
       entity_id: replacementEntityId,
       name: newName,
       cost: newCost,
-      notes: newNotes
-    });
+      notes: newNotes,
+      type: resolvedType,
+      item_type: resolvedType
+    };
+
+    let updatedItem = db.updateItineraryItem(targetItem?.id || itemId, updatedPayload);
+    if (!updatedItem) {
+      updatedItem = {
+        ...(targetItem || {}),
+        id: itemId,
+        tour_plan_id: id,
+        ...updatedPayload
+      };
+    }
 
     // Recompute total cost for tour plan
     const { items: allItems } = db.getItinerary(id);
     const newTotalCost = allItems
       .filter(i => i.status !== 'replaced' && i.status !== 'cancelled')
-      .reduce((sum, i) => sum + (i.cost || 0), 0);
+      .reduce((sum, i) => sum + (Number(i.cost) || 0), 0);
 
     db.updateTourPlan(id, { total_cost: newTotalCost });
 

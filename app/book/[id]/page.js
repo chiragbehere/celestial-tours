@@ -4,6 +4,7 @@ import { useState, useEffect, use } from 'react';
 import Link from 'next/link';
 import TravelerNav from '@/components/layout/TravelerNav';
 import TourLifecycleTracker from '@/components/ui/TourLifecycleTracker';
+import { useAuth } from '@/lib/context/AuthContext';
 import { 
   CheckCircleIcon, 
   ShieldCheckIcon, 
@@ -17,12 +18,13 @@ import {
 export default function BookPage({ params }) {
   const unwrappedParams = use(params);
   const id = unwrappedParams.id;
+  const { user } = useAuth();
 
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState(null);
 
-  const [name, setName] = useState('Aditi Sharma');
-  const [email, setEmail] = useState('aditi.sharma@example.com');
+  const [name, setName] = useState(user?.displayName || '');
+  const [email, setEmail] = useState(user?.email || '');
   const [phone, setPhone] = useState('+91 98765 43210');
   const [paymentMethod, setPaymentMethod] = useState('upi');
 
@@ -33,33 +35,67 @@ export default function BookPage({ params }) {
   const [bookingConfirmed, setBookingConfirmed] = useState(null);
 
   useEffect(() => {
+    if (user) {
+      if (user.displayName && !name) setName(user.displayName);
+      if (user.email && !email) setEmail(user.email);
+    }
+  }, [user]);
+
+  const isType = (item, target) => {
+    const t = (item?.item_type || item?.type || '').toLowerCase();
+    if (target === 'stay') return t === 'stay' || t.includes('hotel') || Boolean(item?.hotel_id);
+    if (target === 'transport') return t === 'transport' || t.includes('cab') || t.includes('transit') || Boolean(item?.transport_id);
+    return t === 'activity' || t.includes('excursion') || t.includes('experience') || (!item?.hotel_id && !item?.transport_id);
+  };
+
+  const initPaymentPrefs = (items) => {
+    const initialPrefs = {};
+    (items || []).forEach(item => {
+      if (isType(item, 'stay')) {
+        initialPrefs[item.id] = 'pay_now'; // Core stay
+      } else if (isType(item, 'transport')) {
+        initialPrefs[item.id] = 'pay_now'; // Core transfer
+      } else {
+        initialPrefs[item.id] = 'pay_on_trip'; // Flexible on-trip payment by default
+      }
+    });
+    setPaymentPrefs(initialPrefs);
+  };
+
+  useEffect(() => {
     async function loadData() {
       try {
         const res = await fetch(`/api/itinerary/${id}`);
         const json = await res.json();
-        if (json.success) {
+        if (json.success && json.tour_plan) {
           setData(json);
-
-          // Initialize payment preferences:
-          // Stays: 'pay_now' (essential core)
-          // Activities & Transport: default to 'pay_on_trip' or 'pay_now'
-          const initialPrefs = {};
-          (json.items || []).forEach(item => {
-            if (item.item_type === 'stay') {
-              initialPrefs[item.id] = 'pay_now'; // Necessary core
-            } else if (item.item_type === 'transport') {
-              initialPrefs[item.id] = 'pay_now'; // Base transit
-            } else {
-              initialPrefs[item.id] = 'pay_on_trip'; // Flexible on-trip payment by default
-            }
-          });
-          setPaymentPrefs(initialPrefs);
+          initPaymentPrefs(json.items);
+          setLoading(false);
+          return;
         }
       } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
+        console.error('Error fetching itinerary for booking:', err);
       }
+
+      // Client-side cache fallback for serverless container switches
+      if (typeof window !== 'undefined') {
+        try {
+          const cachedRaw = localStorage.getItem(`celestial_tour_${id}`) || localStorage.getItem('celestial_last_tour');
+          if (cachedRaw) {
+            const cached = JSON.parse(cachedRaw);
+            if (cached && cached.tour_plan) {
+              setData(cached);
+              initPaymentPrefs(cached.items);
+              setLoading(false);
+              return;
+            }
+          }
+        } catch (e) {
+          console.warn('LocalStorage error in book page:', e);
+        }
+      }
+
+      setLoading(false);
     }
     loadData();
   }, [id]);
@@ -161,8 +197,28 @@ export default function BookPage({ params }) {
       const resData = await res.json();
       if (resData.success) {
         setBookingConfirmed(resData);
+        if (typeof window !== 'undefined') {
+          try {
+            const existingBookings = JSON.parse(localStorage.getItem('celestial_user_bookings') || '[]');
+            existingBookings.unshift({
+              ...resData,
+              tourPlanId: id,
+              booked_at: new Date().toISOString()
+            });
+            localStorage.setItem('celestial_user_bookings', JSON.stringify(existingBookings));
+
+            const cachedRaw = localStorage.getItem(`celestial_tour_${id}`);
+            if (cachedRaw) {
+              const cached = JSON.parse(cachedRaw);
+              cached.tour_plan = { ...cached.tour_plan, status: 'booked' };
+              localStorage.setItem(`celestial_tour_${id}`, JSON.stringify(cached));
+            }
+          } catch (e) {
+            console.warn('LocalStorage save booking error:', e);
+          }
+        }
       } else {
-        alert('Booking failed. Please try again.');
+        alert(resData.error || 'Booking failed. Please try again.');
       }
     } catch (err) {
       console.error(err);
