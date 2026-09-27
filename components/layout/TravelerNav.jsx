@@ -154,9 +154,10 @@ export default function TravelerNav({ transparent = false }) {
         </div>
 
         {/* Mobile Hamburger Toggle Button */}
-        <div className="mobile-only-toggle" style={{ display: 'none', alignItems: 'center', gap: '8px' }}>
+        <div className="nav-mobile-toggle">
           <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            type="button"
+            onClick={() => setMobileMenuOpen(prev => !prev)}
             aria-label="Toggle navigation menu"
             style={{
               display: 'flex',
@@ -165,20 +166,20 @@ export default function TravelerNav({ transparent = false }) {
               width: '42px',
               height: '42px',
               borderRadius: '10px',
-              background: transparent ? 'rgba(255,255,255,0.15)' : '#f1f5f9',
-              border: transparent ? '1px solid rgba(255,255,255,0.25)' : '1px solid #cbd5e1',
+              background: transparent ? 'rgba(255,255,255,0.2)' : '#f1f5f9',
+              border: transparent ? '1px solid rgba(255,255,255,0.35)' : '1px solid #cbd5e1',
               color: transparent ? '#ffffff' : '#0f172a',
               cursor: 'pointer',
               transition: 'all 0.15s ease'
             }}
           >
             {mobileMenuOpen ? (
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
                 <line x1="18" y1="6" x2="6" y2="18"></line>
                 <line x1="6" y1="6" x2="18" y2="18"></line>
               </svg>
             ) : (
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
                 <line x1="3" y1="12" x2="21" y2="12"></line>
                 <line x1="3" y1="6" x2="21" y2="6"></line>
                 <line x1="3" y1="18" x2="21" y2="18"></line>
@@ -198,7 +199,7 @@ export default function TravelerNav({ transparent = false }) {
           bottom: 0,
           background: 'rgba(15, 23, 42, 0.75)',
           backdropFilter: 'blur(8px)',
-          zIndex: 199,
+          zIndex: 99999,
           display: 'flex',
           flexDirection: 'column',
           animation: 'fadeIn 0.2s ease'
@@ -206,14 +207,15 @@ export default function TravelerNav({ transparent = false }) {
         onClick={() => setMobileMenuOpen(false)}
         >
           <div 
+            className="traveler-mobile-drawer"
             style={{
               background: '#ffffff',
               borderBottom: '1px solid #e2e8f0',
-              padding: '20px 24px 28px',
+              padding: '20px 20px 28px',
               display: 'flex',
               flexDirection: 'column',
               gap: '16px',
-              boxShadow: '0 20px 30px rgba(0,0,0,0.15)',
+              boxShadow: '0 20px 30px rgba(0,0,0,0.2)',
               maxHeight: '85vh',
               overflowY: 'auto'
             }}

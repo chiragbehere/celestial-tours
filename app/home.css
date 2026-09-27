@@ -929,13 +929,13 @@
   top: 0;
   left: 0;
   right: 0;
-  z-index: 200;
+  z-index: 99999 !important;
 }
-.home-cinematic header > div a,
-.home-cinematic header > div span {
+.home-cinematic header > div:first-child a,
+.home-cinematic header > div:first-child span {
   color: rgba(255,255,255,0.9);
 }
-.home-cinematic header > div a:hover {
+.home-cinematic header > div:first-child a:hover {
   color: #fff;
 }
 

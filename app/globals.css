@@ -1419,11 +1419,15 @@ input, select, textarea { font-family: inherit; }
    ========================================================================== */
 
 /* Navbar responsive breakpoint */
+.nav-mobile-toggle {
+  display: none !important;
+}
+
 @media (max-width: 900px) {
   .desktop-only-nav {
     display: none !important;
   }
-  .mobile-only-toggle {
+  .nav-mobile-toggle {
     display: flex !important;
   }
 }
@@ -1432,9 +1436,22 @@ input, select, textarea { font-family: inherit; }
   .desktop-only-nav {
     display: flex !important;
   }
-  .mobile-only-toggle {
+  .nav-mobile-toggle {
     display: none !important;
   }
+}
+
+/* Force dark, crisp typography inside the mobile drawer */
+.traveler-mobile-drawer {
+  color: #0f172a !important;
+}
+.traveler-mobile-drawer a,
+.traveler-mobile-drawer span,
+.traveler-mobile-drawer div {
+  color: #0f172a !important;
+}
+.traveler-mobile-drawer a:hover {
+  color: #2563eb !important;
 }
 
 /* Operator Portal Responsive Drawer */
