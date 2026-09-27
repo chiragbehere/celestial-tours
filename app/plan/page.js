@@ -180,11 +180,19 @@ function PlanContent() {
 
       clearInterval(stepTimer);
       const data = await res.json();
-      if (data.success) {
+      if (data.success && data.tour_plan) {
         setGenerationStep('Tour plan constraint-checked! Launching studio...');
+        if (typeof window !== 'undefined') {
+          try {
+            localStorage.setItem(`celestial_tour_${data.tour_plan.id}`, JSON.stringify(data));
+            localStorage.setItem('celestial_last_tour', JSON.stringify(data));
+          } catch (e) {
+            console.warn('Storage error:', e);
+          }
+        }
         setTimeout(() => {
           router.push(`/itinerary/${data.tour_plan.id}`);
-        }, 500);
+        }, 400);
       } else {
         alert(data.error || 'Failed to generate itinerary');
         setIsGenerating(false);

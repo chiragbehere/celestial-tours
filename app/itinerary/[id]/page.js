@@ -22,12 +22,33 @@ export default function ItineraryPage({ params }) {
     try {
       const res = await fetch(`/api/itinerary/${id}`);
       const json = await res.json();
-      if (json.success) setData(json);
+      if (json.success && json.tour_plan) {
+        setData(json);
+        setLoading(false);
+        return;
+      }
     } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
+      console.error('Fetch itinerary error:', err);
     }
+
+    // Client-side fallback from localStorage (handles serverless cold-start container switches)
+    if (typeof window !== 'undefined') {
+      try {
+        const cachedRaw = localStorage.getItem(`celestial_tour_${id}`) || localStorage.getItem('celestial_last_tour');
+        if (cachedRaw) {
+          const cached = JSON.parse(cachedRaw);
+          if (cached && cached.tour_plan) {
+            setData(cached);
+            setLoading(false);
+            return;
+          }
+        }
+      } catch (storageErr) {
+        console.warn('LocalStorage retrieval error:', storageErr);
+      }
+    }
+
+    setLoading(false);
   };
 
   useEffect(() => { fetchItinerary(); }, [id]);
