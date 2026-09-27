@@ -15,9 +15,13 @@ import {
 } from '@/components/ui/Icons';
 import { useEffect, useState } from 'react';
 
-export default function OperatorSidebar() {
+export default function OperatorSidebar({ mobileOpen = false, onClose = () => {} }) {
   const pathname = usePathname();
   const [unresolvedAlerts, setUnresolvedAlerts] = useState(0);
+
+  useEffect(() => {
+    onClose();
+  }, [pathname]);
 
   useEffect(() => {
     async function checkAlerts() {
@@ -83,39 +87,79 @@ export default function OperatorSidebar() {
   ];
 
   return (
-    <aside style={{
-      width: '270px',
-      background: '#ffffff',
-      borderRight: '1px solid #e2e8f0',
-      display: 'flex',
-      flexDirection: 'column',
-      minHeight: '100vh',
-      flexShrink: 0,
-      zIndex: 50,
-      boxShadow: '1px 0 3px rgba(0, 0, 0, 0.02)'
-    }}>
-      {/* Brand Header — Matches Main Site Aesthetic */}
-      <div style={{ padding: '22px 20px', borderBottom: '1px solid #f1f5f9' }}>
-        <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <div style={{
-            width: 36, height: 36,
-            background: 'linear-gradient(140deg, #2563eb 0%, #1a3478 100%)',
-            borderRadius: '10px',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            color: '#fff',
-            boxShadow: '0 3px 10px rgba(37,99,235,0.25)',
-            flexShrink: 0
-          }}>
-            <PlaneIcon size={18} />
-          </div>
-          <div>
-            <div style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0f172a', letterSpacing: '-0.02em', lineHeight: 1 }}>Celestial</div>
-            <div style={{ fontSize: '0.62rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.07em', marginTop: '2px' }}>
-              Operations Suite
+    <>
+      {/* Mobile Drawer Backdrop */}
+      {mobileOpen && (
+        <div 
+          onClick={onClose}
+          style={{
+            position: 'fixed',
+            inset: 0,
+            background: 'rgba(15, 23, 42, 0.65)',
+            backdropFilter: 'blur(4px)',
+            zIndex: 998,
+            animation: 'fadeIn 0.2s ease'
+          }}
+        />
+      )}
+
+      <aside 
+        className={`operator-sidebar ${mobileOpen ? 'mobile-sidebar-active' : ''}`}
+        style={{
+          width: '270px',
+          background: '#ffffff',
+          borderRight: '1px solid #e2e8f0',
+          display: 'flex',
+          flexDirection: 'column',
+          minHeight: '100vh',
+          flexShrink: 0,
+          zIndex: 999,
+          boxShadow: '1px 0 3px rgba(0, 0, 0, 0.02)',
+          transition: 'transform 0.25s cubic-bezier(0.16, 1, 0.3, 1)'
+        }}
+      >
+        {/* Brand Header — Matches Main Site Aesthetic */}
+        <div style={{ padding: '20px', borderBottom: '1px solid #f1f5f9', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div style={{
+              width: 36, height: 36,
+              background: 'linear-gradient(140deg, #2563eb 0%, #1a3478 100%)',
+              borderRadius: '10px',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              color: '#fff',
+              boxShadow: '0 3px 10px rgba(37,99,235,0.25)',
+              flexShrink: 0
+            }}>
+              <PlaneIcon size={18} />
             </div>
-          </div>
-        </Link>
-      </div>
+            <div>
+              <div style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0f172a', letterSpacing: '-0.02em', lineHeight: 1 }}>Celestial</div>
+              <div style={{ fontSize: '0.62rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.07em', marginTop: '2px' }}>
+                Operations Suite
+              </div>
+            </div>
+          </Link>
+
+          {/* Close button inside mobile drawer */}
+          <button
+            onClick={onClose}
+            className="mobile-sidebar-close"
+            style={{
+              display: 'none',
+              background: '#f1f5f9',
+              border: 'none',
+              borderRadius: '8px',
+              width: '32px',
+              height: '32px',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              color: '#475569'
+            }}
+          >
+            ✕
+          </button>
+        </div>
 
       {/* Navigation Links */}
       <nav style={{ padding: '18px 14px', flex: 1, display: 'flex', flexDirection: 'column', gap: '4px' }}>
@@ -241,5 +285,6 @@ export default function OperatorSidebar() {
         </Link>
       </div>
     </aside>
+    </>
   );
 }

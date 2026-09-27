@@ -1410,9 +1410,102 @@ input, select, textarea { font-family: inherit; }
   .grid-cols-3, .grid-cols-2 { grid-template-columns: 1fr; }
   .agency-nav-menu { display: none; }
   .footer-top { grid-template-columns: 1fr; gap: 28px; }
-  .hero-stats-row { gap: 20px; }
+  .hero-stats-row { gap: 20px; flex-wrap: wrap; }
   .hero-stat-divider { display: none; }
 }
+
+/* ==========================================================================
+   MOBILE RESPONSIVENESS SUITE (SMARTPHONES & TABLETS)
+   ========================================================================== */
+
+/* Navbar responsive breakpoint */
+@media (max-width: 900px) {
+  .desktop-only-nav {
+    display: none !important;
+  }
+  .mobile-only-toggle {
+    display: flex !important;
+  }
+}
+
+@media (min-width: 901px) {
+  .desktop-only-nav {
+    display: flex !important;
+  }
+  .mobile-only-toggle {
+    display: none !important;
+  }
+}
+
+/* Operator Portal Responsive Drawer */
+@media (max-width: 1023px) {
+  .operator-mobile-hamburger {
+    display: flex !important;
+  }
+  .mobile-sidebar-close {
+    display: flex !important;
+  }
+  .operator-sidebar {
+    position: fixed !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    width: 280px !important;
+    max-width: 85vw !important;
+    z-index: 9999 !important;
+    transform: translateX(-100%) !important;
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.15) !important;
+  }
+  .operator-sidebar.mobile-sidebar-active {
+    transform: translateX(0) !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .operator-mobile-hamburger {
+    display: none !important;
+  }
+  .mobile-sidebar-close {
+    display: none !important;
+  }
+  .operator-sidebar {
+    transform: none !important;
+    position: relative !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .operator-hub-badge {
+    display: none !important;
+  }
+  .operator-main-content {
+    padding: 16px 12px !important;
+  }
+  .modal-dialog-box {
+    width: 95vw !important;
+    max-width: 95vw !important;
+    margin: 8px !important;
+    padding: 20px 16px !important;
+  }
+  .modal-two-col {
+    grid-template-columns: 1fr !important;
+  }
+  .auth-card-responsive {
+    padding: 24px 18px !important;
+    border-radius: 18px !important;
+  }
+  /* Hero headers */
+  .agency-hero {
+    padding: 32px 0 0 !important;
+  }
+  .agency-hero-title {
+    font-size: 1.85rem !important;
+  }
+  .container {
+    padding: 0 14px !important;
+  }
+}
+
 
 /* Floating PWA Card: Bottom-Right on Desktop, Bottom-Center on Mobile */
 .pwa-floating-card {

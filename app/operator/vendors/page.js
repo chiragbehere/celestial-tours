@@ -311,7 +311,7 @@ export default function OperatorVendorsPage() {
           background: 'rgba(15, 23, 42, 0.4)', backdropFilter: 'blur(4px)',
           display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px'
         }}>
-          <div style={{
+          <div className="modal-dialog-box" style={{
             background: '#ffffff', border: '1px solid #e2e8f0',
             borderRadius: '16px', padding: '28px', maxWidth: '520px', width: '100%',
             boxShadow: '0 20px 40px rgba(0,0,0,0.12)'
@@ -383,7 +383,7 @@ export default function OperatorVendorsPage() {
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           zIndex: 1000, padding: '20px'
         }}>
-          <div style={{
+          <div className="modal-dialog-box" style={{
             background: '#ffffff', borderRadius: '16px', maxWidth: '580px', width: '100%',
             padding: '28px', border: '1px solid #e2e8f0', boxShadow: '0 20px 40px rgba(0,0,0,0.15)',
             maxHeight: '90vh', overflowY: 'auto'
@@ -425,7 +425,7 @@ export default function OperatorVendorsPage() {
                 />
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+              <div className="modal-two-col" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                 <div>
                   <label style={{ fontSize: '0.75rem', fontWeight: 700, color: '#334155', display: 'block', marginBottom: '4px' }}>
                     Category *
@@ -468,7 +468,7 @@ export default function OperatorVendorsPage() {
                 </div>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+              <div className="modal-two-col" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                 <div>
                   <label style={{ fontSize: '0.75rem', fontWeight: 700, color: '#334155', display: 'block', marginBottom: '4px' }}>
                     Unit Rate / Cost (₹) *
@@ -508,7 +508,7 @@ export default function OperatorVendorsPage() {
                 </div>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+              <div className="modal-two-col" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                 <div>
                   <label style={{ fontSize: '0.75rem', fontWeight: 700, color: '#334155', display: 'block', marginBottom: '4px' }}>
                     Contact Person

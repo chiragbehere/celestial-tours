@@ -925,22 +925,18 @@
 
 /* ── TRANSPARENT NAV for homepage ─────────────── */
 .home-cinematic header {
-  background: transparent !important;
-  border-bottom: none !important;
-  box-shadow: none !important;
   position: fixed !important;
   top: 0;
   left: 0;
   right: 0;
   z-index: 200;
 }
-.home-cinematic header a,
-.home-cinematic header span,
-.home-cinematic header div {
-  color: rgba(255,255,255,0.85) !important;
+.home-cinematic header > div a,
+.home-cinematic header > div span {
+  color: rgba(255,255,255,0.9);
 }
-.home-cinematic header a:hover {
-  color: #fff !important;
+.home-cinematic header > div a:hover {
+  color: #fff;
 }
 
 /* ── RESPONSIVE ───────────────────────────────── */

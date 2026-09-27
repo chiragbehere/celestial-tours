@@ -111,7 +111,7 @@ export default function LoginPage() {
       padding: '32px 20px',
       position: 'relative'
     }}>
-      <div style={{
+      <div className="auth-card-responsive" style={{
         background: '#ffffff',
         border: '1px solid #e2e8f0',
         borderRadius: '24px',
