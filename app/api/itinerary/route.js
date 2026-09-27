@@ -3,6 +3,9 @@ import { db } from '@/lib/db/store';
 import { generateItineraryWithAI } from '@/lib/ai/gemini';
 import { getLiveWeather } from '@/lib/weather/service';
 
+export const maxDuration = 60;
+export const dynamic = 'force-dynamic';
+
 export async function GET(req) {
   try {
     const plans = db.getAllTourPlans ? db.getAllTourPlans() : [];

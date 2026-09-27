@@ -147,10 +147,22 @@ function PlanContent() {
     setIsGenerating(true);
     setGenerationStep('Analyzing local hub inventory & hotel contracts...');
 
-    try {
-      setTimeout(() => setGenerationStep('Solving schedule buffer constraints & transit times...'), 600);
-      setTimeout(() => setGenerationStep('Locking verified live vendor pricing & weather contingencies...'), 1200);
+    const steps = [
+      'Solving schedule buffer constraints & transit times...',
+      'Locking verified live vendor pricing & weather contingencies...',
+      'Running Nugen AI reasoning pass on opening hours & venues...',
+      'Optimizing chronological flow and chauffeur transfer routes...',
+      'Finalizing booking vouchers & constraint verification...'
+    ];
+    let stepIdx = 0;
+    const stepTimer = setInterval(() => {
+      if (stepIdx < steps.length) {
+        setGenerationStep(steps[stepIdx]);
+        stepIdx++;
+      }
+    }, 1400);
 
+    try {
       const res = await fetch('/api/itinerary', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -166,6 +178,7 @@ function PlanContent() {
         })
       });
 
+      clearInterval(stepTimer);
       const data = await res.json();
       if (data.success) {
         setGenerationStep('Tour plan constraint-checked! Launching studio...');
@@ -177,6 +190,7 @@ function PlanContent() {
         setIsGenerating(false);
       }
     } catch (err) {
+      clearInterval(stepTimer);
       console.error('Error generating:', err);
       alert('Error connecting to itinerary engine.');
       setIsGenerating(false);

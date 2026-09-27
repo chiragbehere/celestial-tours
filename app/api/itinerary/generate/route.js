@@ -2,6 +2,9 @@ import { NextResponse } from 'next/server';
 import { db } from '@/lib/db/store';
 import { generateItineraryWithAI } from '@/lib/ai/gemini';
 
+export const maxDuration = 60;
+export const dynamic = 'force-dynamic';
+
 export async function POST(req) {
   try {
     const preferences = await req.json();
