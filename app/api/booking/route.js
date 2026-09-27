@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db/store';
+import { saveBookingToFirestore, saveTourPlanToFirestore } from '@/lib/firebase-db';
 
 export async function POST(req) {
   try {
@@ -50,6 +51,9 @@ export async function POST(req) {
         payment_preference: pref
       });
 
+      // Async write to Cloud Firestore
+      saveBookingToFirestore(booking);
+
       createdBookings.push(booking);
     });
 
@@ -61,6 +65,10 @@ export async function POST(req) {
       amount_paid_now: amountPaidNow,
       amount_pay_on_location: amountPayOnLocation
     });
+
+    if (updatedPlan) {
+      saveTourPlanToFirestore(updatedPlan);
+    }
 
     return NextResponse.json({
       success: true,

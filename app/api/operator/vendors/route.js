@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db/store';
+import { saveVendorToFirestore } from '@/lib/firebase-db';
 
 export async function GET(req) {
   try {
@@ -27,6 +28,9 @@ export async function POST(req) {
         return NextResponse.json({ success: false, error: 'Vendor name is required' }, { status: 400 });
       }
       const newVendor = db.addVendor(vendorData);
+      if (newVendor) {
+        saveVendorToFirestore(newVendor);
+      }
       return NextResponse.json({ success: true, vendor: newVendor });
     }
 
