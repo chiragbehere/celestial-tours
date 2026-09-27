@@ -1,22 +1,26 @@
 {
-  "name": "app-temp",
+  "name": "hackcelestial-tour-platform",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "seed": "node seed/seed.js"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.24.0",
+    "@supabase/supabase-js": "^2.49.0",
+    "bootstrap-icons": "^1.13.1",
+    "firebase": "^12.19.0",
+    "leaflet": "^1.9.4",
     "next": "16.3.6",
     "react": "19.2.8",
     "react-dom": "19.2.8"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4",
     "eslint": "^9",
-    "eslint-config-next": "16.3.6",
-    "tailwindcss": "^4"
+    "eslint-config-next": "16.3.6"
   }
 }

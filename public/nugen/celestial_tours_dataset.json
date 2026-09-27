@@ -1,0 +1,105 @@
+{
+  "system": "Celestial Tours AI Agent Alignment Dataset",
+  "version": "1.0.0",
+  "domain": "Autonomous Tourism Operations & Personalized Travel Synthesis",
+  "company": {
+    "name": "Celestial Tours",
+    "mission": "Seamless end-to-end trip planning, real-time weather disruption mitigation, and transparent customizable booking across India.",
+    "supported_destinations": ["Goa", "Manali", "Jaipur", "Munnar", "Rishikesh", "Udaipur"]
+  },
+  "operational_rules": {
+    "budget_enforcement": "Total package cost must never exceed the traveler's stated budget ceiling.",
+    "chronological_sequencing": "Slot 1 (Check-in/Morning baseline), Slot 2 (Chauffeur Transit Buffer), Slot 3 (Midday activity), Slot 4 (Evening experience).",
+    "weather_adaptation": {
+      "rain_threshold_mm": 25,
+      "wind_threshold_kmh": 35,
+      "temp_max_celsius": 40,
+      "disruption_action": "Instantly switch outdoor/water activities to verified sheltered alternatives (spice plantations, indoor museums, cooking sessions) with zero penalty."
+    },
+    "customized_payment_policy": {
+      "mandatory_stays": "Core hotel stays are pre-booked for booking guarantee.",
+      "optional_rides_and_activities": "Travelers can choose to pay chauffeur rides and activities on trip/location instead of prepaying upfront, or skip optional items."
+    }
+  },
+  "destinations": [
+    {
+      "id": "dest-goa",
+      "name": "Goa",
+      "coordinates": { "lat": 15.2993, "lng": 74.1240 },
+      "best_season": "Nov - Feb",
+      "hotels": [
+        { "name": "Taj Exotica Resort & Spa", "tier": "luxury", "price_per_night": 18000, "location": "Benaulim, South Goa" },
+        { "name": "Santana Beach Resort", "tier": "mid", "price_per_night": 4200, "location": "Candolim Beach" },
+        { "name": "The Hosteller Goa", "tier": "budget", "price_per_night": 1400, "location": "Anjuna" }
+      ],
+      "activities": [
+        { "id": "act-scuba-goa", "name": "Grand Island Scuba Diving & Dolphin Cruise", "category": "water-sports", "price": 3500, "weather_sensitive": true, "fallback_id": "act-spice-goa" },
+        { "id": "act-spice-goa", "name": "Sahakari Spice Plantation Tour & Traditional Buffet", "category": "nature/culinary", "price": 1200, "weather_sensitive": false },
+        { "id": "act-fontainhas-goa", "name": "Fontainhas Latin Quarter Heritage Walk", "category": "culture", "price": 1200, "weather_sensitive": false },
+        { "id": "act-anjuna-dinner", "name": "Anjuna Beachside Sunset Shack Dinner", "category": "culinary", "price": 1500, "weather_sensitive": false }
+      ]
+    },
+    {
+      "id": "dest-manali",
+      "name": "Manali",
+      "coordinates": { "lat": 32.2432, "lng": 77.1892 },
+      "best_season": "Oct - Jun",
+      "hotels": [
+        { "name": "The Himalayan Resort & Castle", "tier": "luxury", "price_per_night": 11500, "location": "Hadimba Road" },
+        { "name": "Snow Valley Resorts", "tier": "mid", "price_per_night": 3800, "location": "Log Huts Area" },
+        { "name": "Zostel Manali", "tier": "budget", "price_per_night": 1200, "location": "Old Manali" }
+      ],
+      "activities": [
+        { "id": "act-paragliding-solang", "name": "Solang Valley Tandem Paragliding", "category": "adventure", "price": 3200, "weather_sensitive": true, "fallback_id": "act-old-manali-cafe" },
+        { "id": "act-old-manali-cafe", "name": "Old Manali Apple Orchard Cafe & Folk Music Session", "category": "relaxation", "price": 750, "weather_sensitive": false },
+        { "id": "act-jogini-trek", "name": "Jogini Waterfall Pine Forest Trek", "category": "nature", "price": 800, "weather_sensitive": true, "fallback_id": "act-old-manali-cafe" },
+        { "id": "act-atal-tunnel", "name": "Atal Tunnel & Sissu Lahaul Day Expedition", "category": "sightseeing", "price": 2400, "weather_sensitive": false }
+      ]
+    },
+    {
+      "id": "dest-jaipur",
+      "name": "Jaipur",
+      "coordinates": { "lat": 26.9124, "lng": 75.7873 },
+      "best_season": "Oct - Mar",
+      "hotels": [
+        { "name": "Rambagh Palace", "tier": "luxury", "price_per_night": 28000, "location": "Bhawani Singh Road" },
+        { "name": "Shahpura House", "tier": "mid", "price_per_night": 4500, "location": "Bani Park" },
+        { "name": "Moustache Hostel Jaipur", "tier": "budget", "price_per_night": 950, "location": "Park House Road" }
+      ],
+      "activities": [
+        { "id": "act-amber-fort", "name": "Amber Fort Private Guided Heritage Walk", "category": "culture", "price": 1400, "weather_sensitive": false },
+        { "id": "act-hawa-mahal", "name": "Hawa Mahal & City Palace Royal Museum Tour", "category": "culture", "price": 1100, "weather_sensitive": false },
+        { "id": "act-block-print", "name": "Bagru Artisan Block-Printing Workshop", "category": "workshop", "price": 1800, "weather_sensitive": false },
+        { "id": "act-chokhi-dhani", "name": "Chokhi Dhani Ethnic Rajasthani Village Evening", "category": "culinary", "price": 1600, "weather_sensitive": false }
+      ]
+    },
+    {
+      "id": "dest-munnar",
+      "name": "Munnar",
+      "coordinates": { "lat": 10.0889, "lng": 77.0595 },
+      "best_season": "Sep - May",
+      "hotels": [
+        { "name": "Spice Tree Munnar", "tier": "luxury", "price_per_night": 12000, "location": "Muttukad" },
+        { "name": "Tea County Munnar", "tier": "mid", "price_per_night": 4800, "location": "Munnar Town" }
+      ],
+      "activities": [
+        { "id": "act-tea-estate", "name": "Kolukkumalai Sunrise Tea Estate Safari", "category": "nature", "price": 2200, "weather_sensitive": true },
+        { "id": "act-spice-kerala", "name": "Munnar Spice Plantation Guided Walk", "category": "nature", "price": 800, "weather_sensitive": false }
+      ]
+    }
+  ],
+  "disruption_handling_qa": [
+    {
+      "prompt": "What happens if marine weather disrupts scuba diving in Goa?",
+      "response": "The Celestial Tours autonomous engine identifies high wind (>35 km/h) or heavy rainfall (>25 mm/h), flags the water activity, and offers the traveler an instant swap to the indoor Sahakari Spice Plantation Tour or Old Latin Quarter Walk, recalculating the price difference instantly."
+    },
+    {
+      "prompt": "Can a traveler opt out of paying for cabs and activities upfront?",
+      "response": "Yes. Through Celestial Tours flexible checkout, travelers can check 'Pay on Visit / Spot' for chauffeur rides and select activities, only paying the base accommodation deposit online."
+    },
+    {
+      "prompt": "How does the system ensure travelers do not get overloaded?",
+      "response": "The system applies strict pacing rules: Relaxed pace limits to 1-2 activities/day with late mornings; Moderate pace limits to 2-3 activities; and Packed pace schedules up to 4 activities with mandatory 45-minute transit buffers."
+    }
+  ]
+}
