@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Celestial Tours - Video Recording & Demonstration Script</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
+
+    @page {
+      size: A4 portrait;
+      margin: 14mm 14mm 16mm 14mm;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: #0f172a;
+      background: #ffffff;
+      line-height: 1.5;
+      font-size: 9.5pt;
+      margin: 0;
+      padding: 0;
+    }
+
+    .header-banner {
+      background: linear-gradient(135deg, #091326 0%, #172554 100%);
+      color: #ffffff;
+      padding: 20px 24px;
+      border-radius: 12px;
+      margin-bottom: 18px;
+      border-left: 6px solid #38bdf8;
+    }
+
+    .header-title {
+      font-size: 18pt;
+      font-weight: 800;
+      margin: 0 0 4px 0;
+      letter-spacing: -0.5px;
+      color: #ffffff;
+    }
+
+    .header-subtitle {
+      font-size: 10.5pt;
+      font-weight: 600;
+      color: #38bdf8;
+      margin: 0 0 8px 0;
+    }
+
+    .header-meta {
+      display: flex;
+      gap: 16px;
+      font-size: 8.5pt;
+      color: #94a3b8;
+      font-weight: 500;
+      flex-wrap: wrap;
+    }
+
+    .header-meta span strong {
+      color: #f1f5f9;
+    }
+
+    .quick-specs-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .spec-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 10px 12px;
+    }
+
+    .spec-label {
+      font-size: 7.5pt;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: #64748b;
+      letter-spacing: 0.5px;
+    }
+
+    .spec-value {
+      font-size: 9.5pt;
+      font-weight: 700;
+      color: #0f172a;
+      margin-top: 2px;
+    }
+
+    .checklist-box {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin-bottom: 20px;
+      font-size: 8.5pt;
+    }
+
+    .checklist-title {
+      font-weight: 800;
+      color: #1e40af;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .checklist-items {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px 16px;
+      margin: 0;
+      padding-left: 18px;
+      color: #1e3a8a;
+    }
+
+    .scene-card {
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      margin-bottom: 14px;
+      background: #ffffff;
+      overflow: hidden;
+      page-break-inside: avoid;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+
+    .scene-header {
+      background: #f1f5f9;
+      padding: 8px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .scene-title-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .scene-badge {
+      background: #0284c7;
+      color: #ffffff;
+      font-size: 7.5pt;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 4px;
+      letter-spacing: 0.5px;
+    }
+
+    .scene-title {
+      font-size: 10pt;
+      font-weight: 800;
+      color: #0f172a;
+    }
+
+    .scene-meta-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 8pt;
+      color: #64748b;
+    }
+
+    .scene-time {
+      font-weight: 700;
+      color: #0284c7;
+      background: #e0f2fe;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .scene-url {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 7.5pt;
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: #334155;
+    }
+
+    .scene-body {
+      padding: 12px 14px;
+      display: grid;
+      grid-template-columns: 1fr 1.35fr;
+      gap: 14px;
+    }
+
+    .column-title {
+      font-size: 7.5pt;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .action-col .column-title {
+      color: #059669;
+    }
+
+    .narration-col .column-title {
+      color: #2563eb;
+    }
+
+    .action-steps {
+      margin: 0;
+      padding-left: 16px;
+      font-size: 8.5pt;
+      color: #334155;
+    }
+
+    .action-steps li {
+      margin-bottom: 4px;
+    }
+
+    .narration-box {
+      background: #f8fafc;
+      border-left: 3px solid #2563eb;
+      padding: 8px 10px;
+      border-radius: 0 6px 6px 0;
+      font-size: 8.5pt;
+      color: #0f172a;
+      line-height: 1.45;
+      font-style: italic;
+    }
+
+    .pro-tip {
+      margin-top: 8px;
+      background: #fffbeb;
+      border: 1px dashed #fcd34d;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 7.5pt;
+      color: #92400e;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .pro-tip strong {
+      font-weight: 700;
+      color: #78350f;
+    }
+
+    .page-break {
+      page-break-before: always;
+    }
+
+    .footer {
+      margin-top: 20px;
+      padding-top: 10px;
+      border-top: 1px solid #e2e8f0;
+      display: flex;
+      justify-content: space-between;
+      font-size: 7.5pt;
+      color: #94a3b8;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <div class="header-banner">
+    <div class="header-title">Celestial Tours - Screen Recording & Pitch Script</div>
+    <div class="header-subtitle">Problem Statement ID 07: Autonomous Tourism Operations & Personalized Dynamic Travel Platform</div>
+    <div class="header-meta">
+      <span>Duration: <strong>~4:30 Minutes</strong></span>
+      <span>Target Audience: <strong>Hackathon Judges & Technical Evaluators</strong></span>
+      <span>Resolution: <strong>1080p (1920x1080) at 60 FPS</strong></span>
+      <span>AI Core: <strong>Nugen AI (v3) llama-v3p2-3b-reasoning</strong></span>
+    </div>
+  </div>
+
+  <!-- SPECS -->
+  <div class="quick-specs-grid">
+    <div class="spec-card">
+      <div class="spec-label">Traveler Tech</div>
+      <div class="spec-value">Next.js 16 + PWA + Firebase</div>
+    </div>
+    <div class="spec-card">
+      <div class="spec-label">Inference Engine</div>
+      <div class="spec-value">Nugen AI v3 + Gemini 2.5</div>
+    </div>
+    <div class="spec-card">
+      <div class="spec-label">Constraint Engine</div>
+      <div class="spec-value">Directed Acyclic Graph (DAG)</div>
+    </div>
+    <div class="spec-card">
+      <div class="spec-label">Live Telemetry</div>
+      <div class="spec-value">Open-Meteo Weather APIs</div>
+    </div>
+  </div>
+
+  <!-- CHECKLIST -->
+  <div class="checklist-box">
+    <div class="checklist-title">🎬 Pre-Recording Setup Checklist (Verify Before Hitting Record)</div>
+    <ul class="checklist-items">
+      <li>Ensure local dev server is running on <code>http://localhost:3000</code>.</li>
+      <li>Browser window set to 100% zoom (do not use mobile emulate for desktop scenes).</li>
+      <li>Clean browser cache / incognito tab ready so you start cleanly as a guest.</li>
+      <li>Set microphone audio levels and keep speech cadence clear, steady, and energetic.</li>
+    </ul>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       SCENE 1: HOOK & HERO LANDING PAGE
+  ═══════════════════════════════════════════════ -->
+  <div class="scene-card">
+    <div class="scene-header">
+      <div class="scene-title-group">
+        <span class="scene-badge">SCENE 01</span>
+        <span class="scene-title">The Hook & Landing Page Overview</span>
+      </div>
+      <div class="scene-meta-right">
+        <span class="scene-time">0:00 - 0:25 (25s)</span>
+        <span class="scene-url">/</span>
+      </div>
+    </div>
+    <div class="scene-body">
+      <div class="action-col">
+        <div class="column-title">🎥 Screen Visual Actions</div>
+        <ol class="action-steps">
+          <li>Start on the Celestial Tours homepage with hero photography.</li>
+          <li>Hover over the <strong>"Nugen AI"</strong> badge in the navbar and the hero callouts.</li>
+          <li>Scroll down smoothly past the live destination cards (Goa, Manali, Jaipur, Munnar).</li>
+          <li>Scroll past the three pillars: AI Itinerary Engine, Dynamic Disruption Engine, and B2B Operator Control.</li>
+        </ol>
+        <div class="pro-tip">
+          <strong>Tip:</strong> Keep mouse cursor movements smooth. Don't jitter or click randomly.
+        </div>
+      </div>
+      <div class="narration-col">
+        <div class="column-title">🎙️ Voiceover Narration</div>
+        <div class="narration-box">
+          "Hello judges! This is Celestial Tours—an autonomous tourism operations platform and personalized dynamic travel companion built for Problem Statement 07. Today, holiday planning is broken. Travelers receive rigid, static PDFs, and when sudden monsoons, road closures, or delays occur, the entire itinerary collapses. Celestial Tours solves this by connecting personalized consumer itinerary synthesis directly with autonomous B2B tour operator logistics, powered by a domain-aligned Nugen AI reasoning engine and mathematical constraint validation."
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       SCENE 2: AUTHENTICATION & SECURITY
+  ═══════════════════════════════════════════════ -->
+  <div class="scene-card">
+    <div class="scene-header">
+      <div class="scene-title-group">
+        <span class="scene-badge">SCENE 02</span>
+        <span class="scene-title">Secure Authentication & Traveler Identity</span>
+      </div>
+      <div class="scene-meta-right">
+        <span class="scene-time">0:25 - 0:45 (20s)</span>
+        <span class="scene-url">/account &rarr; /login</span>
+      </div>
+    </div>
+    <div class="scene-body">
+      <div class="action-col">
+        <div class="column-title">🎥 Screen Visual Actions</div>
+        <ol class="action-steps">
+          <li>Click on <strong>"My Account & Trips"</strong> while logged out.</li>
+          <li>Show the clean <strong>"Sign In to Your Traveler Account"</strong> gate (no fake user leak).</li>
+          <li>Click <strong>"Sign In With Email & Password"</strong>.</li>
+          <li>Show clean Firebase email/password fields with password toggle, or sign in as an authenticated traveler.</li>
+        </ol>
+        <div class="pro-tip">
+          <strong>Tip:</strong> Emphasize that predefined demo names like 'Rajesh' or 'Aditi' have been completely removed.
+        </div>
+      </div>
+      <div class="narration-col">
+        <div class="column-title">🎙️ Voiceover Narration</div>
+        <div class="narration-box">
+          "Security and data privacy are foundational. Unauthenticated visitors cannot access sensitive travel records or vouchers. Our platform enforces strict Firebase Authentication with email and password or Google OAuth. Guest visitors start completely clean, and once logged in, each traveler accesses their encrypted identity vault, booking vouchers, and personalized preferences."
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       SCENE 3: AI TRIP CONFIGURATION STUDIO
+  ═══════════════════════════════════════════════ -->
+  <div class="scene-card">
+    <div class="scene-header">
+      <div class="scene-title-group">
+        <span class="scene-badge">SCENE 03</span>
+        <span class="scene-title">AI Trip Configuration Studio & Nugen Synthesis</span>
+      </div>
+      <div class="scene-meta-right">
+        <span class="scene-time">0:45 - 1:20 (35s)</span>
+        <span class="scene-url">/plan</span>
+      </div>
+    </div>
+    <div class="scene-body">
+      <div class="action-col">
+        <div class="column-title">🎥 Screen Visual Actions</div>
+        <ol class="action-steps">
+          <li>Navigate to <strong>AI Trip Planner</strong> (<code>/plan</code>).</li>
+          <li>Select <strong>Destination: Goa</strong>, <strong>Duration: 3 Days</strong>.</li>
+          <li>Select <strong>Accommodation: Boutique Mid-Tier</strong>, <strong>Transit: Private Chauffeur</strong>.</li>
+          <li>Set <strong>Budget: ₹35,000</strong>, <strong>Pace: Relaxed</strong>, and pick <strong>Beaches & Food</strong>.</li>
+          <li>Point out the dynamic live budget estimate card updating in real time.</li>
+          <li>Click the glowing blue button: <strong>"Synthesize Personalized Itinerary"</strong>.</li>
+        </ol>
+        <div class="pro-tip">
+          <strong>Tip:</strong> Highlight the loading state showing <em>"Nugen AI is extracting your travel parameters..."</em>
+        </div>
+      </div>
+      <div class="narration-col">
+        <div class="column-title">🎙️ Voiceover Narration</div>
+        <div class="narration-box">
+          "Now let's synthesize a personalized trip. In the AI Trip Configuration Studio, travelers set their parameters—destination, duration, budget ceiling, pace, and interests. Unlike generic chatbots that hallucinate non-existent spots, our engine queries real-time supplier inventory. When I click 'Synthesize', our Nugen AI domain-aligned model (llama-v3p2-3b-reasoning) runs a mathematical constraint pass, guaranteeing that venue opening hours, transit buffers, and budget limits are mathematically respected."
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- ═══════════════════════════════════════════════
+       SCENE 4: INTERACTIVE ITINERARY STUDIO
+  ═══════════════════════════════════════════════ -->
+  <div class="scene-card">
+    <div class="scene-header">
+      <div class="scene-title-group">
+        <span class="scene-badge">SCENE 04</span>
+        <span class="scene-title">Interactive Itinerary Studio & Budget Breakdown</span>
+      </div>
+      <div class="scene-meta-right">
+        <span class="scene-time">1:20 - 1:55 (35s)</span>
+        <span class="scene-url">/itinerary/[id]</span>
+      </div>
+    </div>
+    <div class="scene-body">
+      <div class="action-col">
+        <div class="column-title">🎥 Screen Visual Actions</div>
+        <ol class="action-steps">
+          <li>Show the synthesized itinerary landing view.</li>
+          <li>Click through <strong>Day 1, Day 2, and Day 3</strong> tabs to show seamless chronological transitions.</li>
+          <li>Highlight the 4-slot structure: Hotel Check-in, Chauffeur Pickup (Transit buffer), Midday Sightseeing, Evening Leisure.</li>
+          <li>Scroll down to the <strong>Budget Breakdown Meter</strong> showing exact costs for Stays, Transit, and Activities.</li>
+          <li>Click <strong>"Proceed to Booking"</strong> (<code>/book/[id]</code>).</li>
+        </ol>
+        <div class="pro-tip">
+          <strong>Tip:</strong> Point out that the total cost (e.g. ₹31,600) is strictly within the ₹35,000 budget!
+        </div>
+      </div>
+      <div class="narration-col">
+        <div class="column-title">🎙️ Voiceover Narration</div>
+        <div class="narration-box">
+          "Here is the generated itinerary. Notice the chronological perfection. Day 1 starts with airport chauffeur pickup and check-in at Santana Beach Resort, followed by an afternoon Fontainhas heritage walk and beachside dinner. Every leg includes a dedicated 30 to 60-minute chauffeur transit buffer. In the budget meter, you can see how every rupee is accounted for across stays, private transport, and verified activities—totaling ₹31,600, well within our ₹35,000 ceiling."
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       SCENE 5: BOOKING & "PAY ON LOCATION"
+  ═══════════════════════════════════════════════ -->
+  <div class="scene-card">
+    <div class="scene-header">
+      <div class="scene-title-group">
+        <span class="scene-badge">SCENE 05</span>
+        <span class="scene-title">Checkout & Flexible "Pay on Location"</span>
+      </div>
+      <div class="scene-meta-right">
+        <span class="scene-time">1:55 - 2:15 (20s)</span>
+        <span class="scene-url">/book/[id]</span>
+      </div>
+    </div>
+    <div class="scene-body">
+      <div class="action-col">
+        <div class="column-title">🎥 Screen Visual Actions</div>
+        <ol class="action-steps">
+          <li>On the booking page, show Traveler details and emergency contact fields.</li>
+          <li>Highlight the two payment options: <strong>"Pay Full Package Now"</strong> vs <strong>"Pay on Location"</strong>.</li>
+          <li>Select <strong>"Pay on Location"</strong>: show how upfront payable adjusts to essential stays while activity costs are itemized for on-spot settlement.</li>
+          <li>Click <strong>"Confirm Reservation"</strong>.</li>
+        </ol>
+      </div>
+      <div class="narration-col">
+        <div class="column-title">🎙️ Voiceover Narration</div>
+        <div class="narration-box">
+          "At checkout, Celestial Tours supports both full upfront digital payments and our unique 'Pay on Location' mode. In India, many travelers prefer settling local experiences on-site. Choosing 'Pay on Location' secures the hotel and chauffeur instantly while creating on-spot vouchers for scheduled excursions. Let's confirm the booking."
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       SCENE 6: PRE-TRIP VAULT & READINESS
+  ═══════════════════════════════════════════════ -->
+  <div class="scene-card">
+    <div class="scene-header">
+      <div class="scene-title-group">
+        <span class="scene-badge">SCENE 06</span>
+        <span class="scene-title">Pre-Trip Vault & Interactive Readiness</span>
+      </div>
+      <div class="scene-meta-right">
+        <span class="scene-time">2:15 - 2:35 (20s)</span>
+        <span class="scene-url">/trip/[id]/prepare</span>
+      </div>
+    </div>
+    <div class="scene-body">
+      <div class="action-col">
+        <div class="column-title">🎥 Screen Visual Actions</div>
+        <ol class="action-steps">
+          <li>Navigate to <strong>Pre-Trip Vault</strong> (<code>/trip/[id]/prepare</code>).</li>
+          <li>Check off items on the <strong>Dynamic Packing Checklist</strong> (Linen shirts, sunscreen, water shoes).</li>
+          <li>Show the <strong>Encrypted Document Vault</strong> with tabs for Government ID, Flight Passes, and Hotel Vouchers.</li>
+          <li>Highlight the destination-specific <strong>Emergency Contacts directory</strong>.</li>
+        </ol>
+      </div>
+      <div class="narration-col">
+        <div class="column-title">🎙️ Voiceover Narration</div>
+        <div class="narration-box">
+          "Before traveling, our Pre-Trip Vault eliminates travel anxiety. The interactive packing checklist is dynamically customized to the destination's climate—suggesting tropical gear for Goa or thermal layers for Manali. Travelers can upload Government IDs and boarding passes to their encrypted offline-ready vault, with 1-tap access to local hospital and tourist police contacts."
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       SCENE 7: LIVE COMPANION & IN-TRIP CONCIERGE
+  ═══════════════════════════════════════════════ -->
+  <div class="scene-card">
+    <div class="scene-header">
+      <div class="scene-title-group">
+        <span class="scene-badge">SCENE 07</span>
+        <span class="scene-title">Live Companion & Real Nugen AI Concierge</span>
+      </div>
+      <div class="scene-meta-right">
+        <span class="scene-time">2:35 - 3:15 (40s)</span>
+        <span class="scene-url">/trip/[id]</span>
+      </div>
+    </div>
+    <div class="scene-body">
+      <div class="action-col">
+        <div class="column-title">🎥 Screen Visual Actions</div>
+        <ol class="action-steps">
+          <li>Navigate to <strong>Live Companion</strong> (<code>/trip/[id]</code>).</li>
+          <li>Show the <strong>Live Weather Widget</strong> (e.g., 29°C, coastal breeze), next activity countdown, and assigned coordinator card (<em>Meera Nair</em>).</li>
+          <li>Click the <strong>AI Concierge Assistant</strong> chat bubble.</li>
+          <li>Ask: <em>"What is my next activity and what should I wear?"</em></li>
+          <li>Show the live response returned directly from Nugen AI reasoning!</li>
+          <li>Point out the 1-click <strong>Emergency SOS</strong> button.</li>
+        </ol>
+        <div class="pro-tip">
+          <strong>Crucial Demo Moment:</strong> Emphasize that the AI knows the traveler's exact day, hotel, and schedule!
+        </div>
+      </div>
+      <div class="narration-col">
+        <div class="column-title">🎙️ Voiceover Narration</div>
+        <div class="narration-box">
+          "Once on tour, the Live Companion becomes the traveler's digital co-pilot. It streams real-time weather telemetry, highlights the upcoming schedule item, and displays the direct WhatsApp contact of the on-ground coordinator. Look at our AI Concierge. It's powered directly by our live Nugen AI reasoning model. When I ask what's next and what to wear, it doesn't give generic advice—it reads my active schedule, notes that I'm heading out on a coastal catamaran, and advises comfortable boat footwear and a light jacket for the sunset breeze."
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- ═══════════════════════════════════════════════
+       SCENE 8: OPERATOR ALERTS & CASCADE REROUTING
+  ═══════════════════════════════════════════════ -->
+  <div class="scene-card">
+    <div class="scene-header">
+      <div class="scene-title-group">
+        <span class="scene-badge">SCENE 08</span>
+        <span class="scene-title">B2B Operator Console: Dynamic Disruption Engine</span>
+      </div>
+      <div class="scene-meta-right">
+        <span class="scene-time">3:15 - 3:55 (40s)</span>
+        <span class="scene-url">/operator/alerts</span>
+      </div>
+    </div>
+    <div class="scene-body">
+      <div class="action-col">
+        <div class="column-title">🎥 Screen Visual Actions</div>
+        <ol class="action-steps">
+          <li>Switch to the <strong>Operator Alert Center</strong> (<code>/operator/alerts</code>).</li>
+          <li>Show the active disruption alert: <em>"Severe Rainfall & Marine Squall in Goa (>30 mm/h) - Grand Island Scuba Disrupted"</em>.</li>
+          <li>Show the <strong>Cascade Delay Impact Analysis</strong> (downstream lunch and transfer affected).</li>
+          <li>Click <strong>"Generate AI Alternatives"</strong>.</li>
+          <li>Show Nugen AI generating <strong>3 ranked feasible alternatives</strong>.</li>
+          <li>Click <strong>"Approve & Dispatch"</strong> on Alternative 1 (Sahakari Spice Sanctuary indoor tour).</li>
+          <li>Briefly show the traveler's Companion app updating with the new pass!</li>
+        </ol>
+        <div class="pro-tip">
+          <strong>Key Innovation:</strong> This is what wins hackathons! Dynamic autonomous re-routing!
+        </div>
+      </div>
+      <div class="narration-col">
+        <div class="column-title">🎙️ Voiceover Narration</div>
+        <div class="narration-box">
+          "Now, let's step into the shoes of the Tour Operator. Suddenly, a coastal storm hits Goa with rainfall over 30 mm per hour. In traditional travel, this creates chaos. But in Celestial Tours, our Cascade Delay Engine immediately detects that the open-water scuba trip is compromised. With one click, Nugen AI synthesizes 3 ranked, feasible alternatives. Alternative 1 swaps the outdoor boat tour with the indoor Sahakari Spice Plantation sanctuary, preserving the day's timeline and crediting a ₹2,300 price difference to the traveler's wallet. When the operator approves, the traveler's live companion updates in real time with new supplier vouchers."
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       SCENE 9: OPERATOR ECOSYSTEM & SIMULATION
+  ═══════════════════════════════════════════════ -->
+  <div class="scene-card">
+    <div class="scene-header">
+      <div class="scene-title-group">
+        <span class="scene-badge">SCENE 09</span>
+        <span class="scene-title">Operator Dashboard, Fleet Hub & Simulation</span>
+      </div>
+      <div class="scene-meta-right">
+        <span class="scene-time">3:55 - 4:15 (20s)</span>
+        <span class="scene-url">/operator/dashboard & /operator/simulation</span>
+      </div>
+    </div>
+    <div class="scene-body">
+      <div class="action-col">
+        <div class="column-title">🎥 Screen Visual Actions</div>
+        <ol class="action-steps">
+          <li>Quickly click through <strong>Operator Dashboard</strong> (active journeys, revenue, 94.2% on-time metric).</li>
+          <li>Open <strong>Vendors & Fleet Hub</strong> (<code>/operator/vendors</code>) showing hotel and chauffeur quality scores.</li>
+          <li>Open <strong>Coordinators Hub</strong> (<code>/operator/coordinators</code>) showing field guides.</li>
+          <li>Open <strong>Simulation Sandbox</strong> (<code>/operator/simulation</code>) demonstrating how operators stress-test extreme weather shocks.</li>
+        </ol>
+      </div>
+      <div class="narration-col">
+        <div class="column-title">🎙️ Voiceover Narration</div>
+        <div class="narration-box">
+          "The operator console provides a complete bird's-eye command center: tracking active tours across India, vendor reliability ratings derived from traveler reviews, and field coordinator allocations. In our simulation sandbox, operators can stress-test extreme cyclones or highway landslides to verify autonomous readiness before high season."
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       SCENE 10: CLOSING & CONCLUSION
+  ═══════════════════════════════════════════════ -->
+  <div class="scene-card">
+    <div class="scene-header">
+      <div class="scene-title-group">
+        <span class="scene-badge">SCENE 10</span>
+        <span class="scene-title">Mobile PWA & Final Hackathon Pitch</span>
+      </div>
+      <div class="scene-meta-right">
+        <span class="scene-time">4:15 - 4:35 (20s)</span>
+        <span class="scene-url">/ & mobile view</span>
+      </div>
+    </div>
+    <div class="scene-body">
+      <div class="action-col">
+        <div class="column-title">🎥 Screen Visual Actions</div>
+        <ol class="action-steps">
+          <li>Toggle Chrome DevTools device mode to show <strong>Mobile Responsive PWA</strong> (clean bottom drawer, mobile tabs).</li>
+          <li>Highlight the <strong>"Install App"</strong> button.</li>
+          <li>Return to Desktop view on the Hero landing page.</li>
+          <li>End with mouse resting on the Celestial logo.</li>
+        </ol>
+      </div>
+      <div class="narration-col">
+        <div class="column-title">🎙️ Voiceover Narration</div>
+        <div class="narration-box">
+          "Everything you've seen is fully mobile responsive and installable as a Progressive Web App with offline service worker caching for low-connectivity Himalayan and coastal zones. Celestial Tours demonstrates how domain-aligned AI transforms tourism from fragile, static itineraries into resilient, autonomous travel operations. Thank you!"
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <span>Celestial Tours &bull; HackCelestial 2026</span>
+    <span>Powered by Nugen AI Domain-Aligned Platform &bull; Problem Statement ID 07</span>
+    <span>Page 3 of 3</span>
+  </div>
+
+</body>
+</html>
